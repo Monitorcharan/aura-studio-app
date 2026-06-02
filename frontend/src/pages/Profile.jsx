@@ -81,8 +81,8 @@ export default function Profile() {
   return (
     <>
       <Preloader title="AURA / PROFILE" subtitle="PERSONAL DASHBOARD" />
-      <main className="min-h-screen px-8 md:px-24 py-24 max-w-6xl mx-auto relative z-10" style={{ color: 'var(--text-color)' }}>
-        <section className="glass-panel rounded-3xl p-10 shadow-2xl fade-in-up" style={{ borderColor: 'var(--surface-border)' }}>
+      <main className="min-h-screen px-4 sm:px-8 md:px-24 py-24 max-w-6xl mx-auto relative z-10" style={{ color: 'var(--text-color)' }}>
+        <section className="glass-panel rounded-2xl sm:rounded-3xl p-5 sm:p-10 shadow-2xl fade-in-up" style={{ borderColor: 'var(--surface-border)' }}>
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-xl">
               <p className="text-accentCyan uppercase tracking-[0.3em] text-xs font-mono mb-4">Client Dashboard</p>
@@ -115,7 +115,7 @@ export default function Profile() {
             </div>
           </div>
 
-          <div className="mt-12 grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="mt-8 sm:mt-12 grid gap-6 sm:gap-10 lg:grid-cols-[1.2fr_0.8fr]">
             <div className="glass-panel rounded-3xl p-8" style={{ borderColor: 'var(--surface-border)' }}>
               <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--heading-color)' }}>Profile Details</h2>
               {errorMessage && <p className="text-rose-400 mb-4">{errorMessage}</p>}

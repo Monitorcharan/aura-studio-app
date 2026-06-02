@@ -106,8 +106,8 @@ export default function Register() {
     <>
       <Preloader title="AURA / CREATE" subtitle="SECURE REGISTRATION" />
 
-      <main className="min-h-screen flex items-center justify-center px-8 md:px-24 py-28 max-w-7xl mx-auto w-full relative">
-        <div className="grid lg:grid-cols-12 items-center gap-12 w-full">
+      <main className="min-h-screen flex items-center justify-center px-4 sm:px-8 md:px-24 py-24 sm:py-28 max-w-7xl mx-auto w-full relative">
+        <div className="grid lg:grid-cols-12 items-center gap-8 sm:gap-12 w-full">
           {/* Left Side: Brutalist Branding */}
           <div className="hidden lg:flex lg:col-span-6 flex-col justify-between h-[52vh] text-left select-none pointer-events-none fade-in-up">
             <div className="text-accentCyan font-mono text-xs uppercase tracking-[0.3em]">Registration</div>
@@ -124,7 +124,7 @@ export default function Register() {
 
           {/* Right Side: Glassmorphic Registration Form */}
           <div className="lg:col-span-6 flex justify-center lg:justify-end w-full fade-in-up">
-            <div className="glass-panel rounded-3xl p-8 md:p-10 w-full max-w-md shadow-2xl relative" style={{ borderColor: 'var(--surface-border)' }}>
+            <div className="glass-panel rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 w-full max-w-md shadow-2xl relative" style={{ borderColor: 'var(--surface-border)' }}>
               <div className="text-center lg:text-left mb-6">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full text-accentCyan text-lg mb-4" style={{ backgroundColor: 'var(--icon-bg)' }}>
                   👤

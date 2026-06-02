@@ -90,9 +90,9 @@ export default function Payment() {
     <>
       <Preloader title="AURA / PAYMENT" subtitle="SECURE TRANSACTION" />
 
-      <main className="min-h-screen px-8 md:px-24 py-24 max-w-6xl mx-auto relative z-10" style={{ color: 'var(--text-color)' }}>
-        <section className="glass-panel rounded-3xl p-10 shadow-2xl fade-in-up" style={{ borderColor: 'var(--surface-border)' }}>
-          <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-10">
+      <main className="min-h-screen px-4 sm:px-8 md:px-24 py-24 max-w-6xl mx-auto relative z-10" style={{ color: 'var(--text-color)' }}>
+        <section className="glass-panel rounded-2xl sm:rounded-3xl p-5 sm:p-10 shadow-2xl fade-in-up" style={{ borderColor: 'var(--surface-border)' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6 sm:gap-10">
             <div>
               <div className="text-accentCyan uppercase tracking-[0.3em] text-xs font-mono mb-4">Payment Authorization</div>
               <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--heading-color)' }}>Finish your booking with secure checkout.</h1>

@@ -255,15 +255,15 @@ export default function AdminDashboard() {
     <>
       <Preloader title="AURA / ADMIN" subtitle="COMMAND PORTAL" />
 
-      <main className="min-h-screen px-8 md:px-24 py-28 max-w-7xl mx-auto w-full relative">
+      <main className="min-h-screen px-4 sm:px-8 md:px-24 py-24 sm:py-28 max-w-7xl mx-auto w-full relative">
         <section className="w-full">
-          <div className="glass-panel rounded-3xl p-8 md:p-10 shadow-2xl fade-in-up" style={{ borderColor: 'var(--surface-border)' }}>
+          <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 shadow-2xl fade-in-up" style={{ borderColor: 'var(--surface-border)' }}>
             
             {/* Dashboard Header */}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 pb-8" style={{ borderBottom: '1px solid var(--surface-border-subtle)' }}>
               <div>
                 <p className="text-accentCyan text-xs font-mono uppercase tracking-[0.24em] mb-3">Admin Command Center</p>
-                <h1 className="text-4xl md:text-5xl font-bold font-display leading-tight" style={{ color: 'var(--heading-color)' }}>Control Panel</h1>
+                <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold font-display leading-tight" style={{ color: 'var(--heading-color)' }}>Control Panel</h1>
                 <p className="text-sm font-light mt-3 max-w-xl" style={{ color: 'var(--text-muted)' }}>
                   Curate styling catalog listings, manage appointment schedules, and track operations metrics in real-time.
                 </p>

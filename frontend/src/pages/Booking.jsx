@@ -314,6 +314,29 @@ export default function Booking() {
     animFrameIdRef.current = requestAnimationFrame(drawOverlay);
   };
 
+  const handleTouchStart = (e) => {
+    const touch = e.touches[0];
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: touch.clientX - overlayPos.x,
+      y: touch.clientY - overlayPos.y
+    };
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    let nextX = touch.clientX - dragStartRef.current.x;
+    let nextY = touch.clientY - dragStartRef.current.y;
+    nextX = Math.max(-100, Math.min(100, nextX));
+    nextY = Math.max(-100, Math.min(100, nextY));
+    setOverlayPos({ x: nextX, y: nextY });
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   // Dragging inside modal
   const handleMouseDown = (e) => {
     setIsDragging(true);
@@ -364,8 +387,8 @@ export default function Booking() {
       {/* Voice Assistant Orb */}
       <AIConciergeOrb />
 
-      <main className="min-h-screen flex items-center justify-center px-8 md:px-24 py-28 max-w-7xl mx-auto w-full relative">
-        <section className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 w-full items-stretch">
+      <main className="min-h-screen flex items-start md:items-center justify-center px-4 sm:px-8 md:px-24 py-24 md:py-28 max-w-7xl mx-auto w-full relative">
+        <section className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-6 md:gap-8 w-full items-stretch">
           
           {/* Left Spatial Twin Card */}
           <div className="glass-panel rounded-3xl p-6 shadow-2xl flex flex-col justify-between items-stretch relative overflow-hidden min-h-[500px]" style={{ borderColor: 'var(--surface-border)' }}>
@@ -569,13 +592,13 @@ export default function Booking() {
 
       {/* WebXR Try-On Virtual Mirror Modal */}
       {isMirrorOpen && (
-        <div className="fixed inset-0 z-[100000] flex items-center justify-center p-6 backdrop-blur-xl opacity-100 scale-100 transition-all duration-300" style={{ backgroundColor: 'var(--overlay-bg)' }}>
-          <div className="glass-panel max-w-md w-full rounded-3xl shadow-2xl overflow-hidden relative p-6 flex flex-col items-center" style={{ borderColor: 'var(--surface-border)' }}>
+        <div className="fixed inset-0 z-[100000] flex items-center justify-center p-3 sm:p-6 backdrop-blur-xl opacity-100 scale-100 transition-all duration-300" style={{ backgroundColor: 'var(--overlay-bg)' }}>
+          <div className="glass-panel max-w-md w-full rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden relative p-4 sm:p-6 flex flex-col items-center max-h-[95vh] overflow-y-auto" style={{ borderColor: 'var(--surface-border)' }}>
             
-            <div className="flex justify-between items-center w-full mb-4">
+            <div className="flex justify-between items-center w-full mb-3 sm:mb-4">
               <div>
                 <p className="text-accentCyan text-[10px] font-mono uppercase tracking-[0.24em]">WebXR mirror mode</p>
-                <h3 className="text-xl font-bold font-display" style={{ color: 'var(--heading-color)' }}>Style Virtual Mirror</h3>
+                <h3 className="text-lg sm:text-xl font-bold font-display" style={{ color: 'var(--heading-color)' }}>Style Virtual Mirror</h3>
               </div>
               <button
                 type="button"
@@ -593,8 +616,11 @@ export default function Booking() {
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
               onWheel={handleWheel}
-              className="mirror-container w-full aspect-[4/3] rounded-2xl relative overflow-hidden shadow-inner cursor-grab active:cursor-grabbing"
+              className="mirror-container w-full aspect-[4/3] rounded-xl sm:rounded-2xl relative overflow-hidden shadow-inner cursor-grab active:cursor-grabbing"
               style={{ borderWidth: '1px', borderColor: 'var(--surface-border)' }}
             >
               <video ref={videoRef} className="mirror-video" autoPlay playsInline muted />

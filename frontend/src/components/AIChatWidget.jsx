@@ -56,13 +56,13 @@ export default function AIChatWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[99999] flex flex-col items-end">
+    <div className="fixed bottom-6 right-6 z-[99999] flex flex-col items-end max-sm:bottom-3 max-sm:right-3">
       {/* Chat Window */}
       <div 
         className={`glass-panel rounded-3xl mb-4 overflow-hidden shadow-2xl transition-all duration-300 transform origin-bottom-right ${
           isOpen ? 'scale-100 opacity-100 translate-y-0 flex' : 'scale-0 opacity-0 translate-y-10 hidden'
         }`}
-        style={{ width: '350px', height: '500px', flexDirection: 'column', borderColor: 'var(--surface-border)' }}
+        style={{ width: 'min(350px, calc(100vw - 2rem))', height: 'min(500px, 70vh)', flexDirection: 'column', borderColor: 'var(--surface-border)' }}
       >
         {/* Header */}
         <div className="p-4 flex items-center justify-between" style={{ borderBottom: '1px solid var(--surface-border)', backgroundColor: 'rgba(0,240,255,0.1)' }}>

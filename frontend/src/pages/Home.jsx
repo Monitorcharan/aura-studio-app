@@ -157,12 +157,12 @@ export default function Home() {
       <Preloader title="AURA / LABS" subtitle="SYSTEM INITIALIZING" />
       
       {/* Hero Section */}
-      <header className="h-screen flex items-center justify-start px-8 md:px-24 max-w-7xl mx-auto w-full relative pointer-events-none">
-        <div className="max-w-3xl mt-12 pointer-events-auto">
+      <header className="min-h-screen flex items-center justify-start px-4 sm:px-8 md:px-24 max-w-7xl mx-auto w-full relative pointer-events-none">
+        <div className="max-w-3xl mt-20 sm:mt-12 pointer-events-auto">
           <div className="text-accentCyan font-mono text-xs uppercase tracking-[0.3em] mb-4 fade-in-up">
             Premium Grooming Experience
           </div>
-          <h1 className="text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8 reveal-text" style={{ color: 'var(--heading-color)' }}>
+          <h1 className="text-3xl sm:text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-6 sm:mb-8 reveal-text" style={{ color: 'var(--heading-color)' }}>
             {userName ? `Welcome back, ${userName}.` : 'Elevate Your Aesthetic.'}
           </h1>
           <p className="text-base md:text-lg mb-10 max-w-md font-light leading-relaxed fade-in-up" style={{ color: 'var(--text-muted)' }}>
@@ -170,7 +170,7 @@ export default function Home() {
           </p>
           <Link
             to="/booking"
-            className="glass-panel text-xs hover:opacity-90 transition duration-300 inline-flex items-center gap-3 w-max fade-in-up magnetic cursor-none px-8 py-4 rounded-full font-bold uppercase tracking-wider"
+            className="glass-panel text-xs hover:opacity-90 transition duration-300 inline-flex items-center gap-3 w-max fade-in-up magnetic cursor-none px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold uppercase tracking-wider"
             style={{ color: 'var(--heading-color)', borderColor: 'var(--surface-border)' }}
           >
             Reserve a Chair <span className="text-accentCyan font-semibold">→</span>
@@ -179,7 +179,7 @@ export default function Home() {
       </header>
 
       {/* Asymmetrical Philosophy Section */}
-      <section id="philosophy" className="py-32 px-8 md:px-24 max-w-7xl mx-auto">
+      <section id="philosophy" className="py-16 sm:py-32 px-4 sm:px-8 md:px-24 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5 space-y-6">
             <div className="text-accentPurple font-mono text-xs uppercase tracking-[0.3em]">
@@ -219,7 +219,7 @@ export default function Home() {
       </section>
 
       {/* Services Grid Section */}
-      <section id="services" className="py-32 px-8 md:px-24" style={{ background: `linear-gradient(to bottom, transparent, var(--gradient-to))` }}>
+      <section id="services" className="py-16 sm:py-32 px-4 sm:px-8 md:px-24" style={{ background: `linear-gradient(to bottom, transparent, var(--gradient-to))` }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
             <div>
@@ -233,7 +233,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {/* Card 1 */}
             <div className="glass-panel p-8 rounded-3xl hover:border-accentCyan/30 transition duration-500 cursor-pointer tilt-card flex flex-col justify-between aspect-[3/4]" style={{ borderColor: 'var(--surface-border)' }}>
               <div>
@@ -310,7 +310,7 @@ export default function Home() {
       </section>
 
       {/* Elite VIP Section */}
-      <section className="py-32 px-8 md:px-24 max-w-7xl mx-auto border-t" style={{ borderColor: 'var(--surface-border)' }}>
+      <section className="py-16 sm:py-32 px-4 sm:px-8 md:px-24 max-w-7xl mx-auto border-t" style={{ borderColor: 'var(--surface-border)' }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <div className="text-yellow-400 font-mono text-xs uppercase tracking-[0.3em]">
@@ -357,7 +357,7 @@ export default function Home() {
       <footer className="py-24 px-8 md:px-24 relative" style={{ backgroundColor: 'var(--footer-bg)', borderTop: '1px solid var(--surface-border-subtle)' }}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
           <div className="text-center md:text-left">
-            <h2 className="text-4xl md:text-7xl font-bold tracking-tighter leading-none mb-4 font-display" style={{ color: 'var(--heading-color)' }}>
+            <h2 className="text-3xl sm:text-4xl md:text-7xl font-bold tracking-tighter leading-none mb-4 font-display" style={{ color: 'var(--heading-color)' }}>
               Ready to elevate?
             </h2>
             <p className="font-light max-w-sm" style={{ color: 'var(--text-muted)' }}>
@@ -367,7 +367,7 @@ export default function Home() {
           
           <Link
             to="/booking"
-            className="text-sm uppercase tracking-widest font-bold px-12 py-5 rounded-full hover:bg-accentCyan hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition duration-500 magnetic cursor-none"
+            className="text-sm uppercase tracking-widest font-bold px-8 sm:px-12 py-4 sm:py-5 rounded-full hover:bg-accentCyan hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition duration-500 magnetic cursor-none text-center"
             style={{ backgroundColor: 'var(--btn-bg)', color: 'var(--btn-text)' }}
           >
             Book A Chair Now

@@ -375,12 +375,6 @@ input::placeholder, textarea::placeholder {
 .mirror-controls { display: flex; align-items: center; }
 .mirror-controls .btn-primary { flex: 1; }
 
-@media (max-width: 768px) {
-    .mirror-container { min-height: 56vh; border-radius: 18px; }
-    .btn-primary { padding: 0.9rem 1rem; font-size: 0.95rem; }
-    .mirror-controls { gap: 0.5rem; }
-}
-
 /* Ensure upload label is tappable on mobile */
 label input[type="file"].sr-only { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
@@ -422,3 +416,168 @@ button,
 a {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+/* ===========================================
+   DEEP MOBILE OPTIMIZATION
+   =========================================== */
+
+/* -- Fluid Typography Root -- */
+html {
+    font-size: 16px;
+}
+
+/* -- Mobile-First Breakpoint: Phones (< 640px) -- */
+@media (max-width: 639px) {
+    html { font-size: 15px; }
+
+    /* Global spacing reductions */
+    .px-8 { padding-left: 1rem !important; padding-right: 1rem !important; }
+    .py-28 { padding-top: 5.5rem !important; padding-bottom: 1.5rem !important; }
+    .py-32 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+    .py-24 { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+    .gap-12 { gap: 1.5rem !important; }
+    .gap-8 { gap: 1.25rem !important; }
+    .mb-16 { margin-bottom: 2rem !important; }
+
+    /* Navbar mobile fixes */
+    nav.fixed {
+        margin-top: 0.5rem !important;
+        padding: 0.6rem 1rem !important;
+        border-radius: 1rem !important;
+        margin-left: 0.5rem !important;
+        margin-right: 0.5rem !important;
+    }
+    nav .text-2xl { font-size: 1.15rem !important; }
+    
+    /* Hero section mobile */
+    .h-screen { min-height: calc(100svh - 2rem); height: auto; }
+    header .max-w-3xl { max-width: 100% !important; }
+
+    /* Headings fluid scale */
+    h1 { font-size: 2rem !important; line-height: 1.1 !important; }
+    h2 { font-size: 1.6rem !important; line-height: 1.15 !important; }
+    h3 { font-size: 1.15rem !important; }
+
+    /* Service cards - remove forced aspect ratio on mobile */
+    .tilt-card[class*="aspect"] { aspect-ratio: unset !important; }
+    .glass-panel.rounded-3xl { border-radius: 1.25rem !important; }
+    .glass-panel p, .glass-panel span { word-break: break-word; }
+    .p-8 { padding: 1.25rem !important; }
+    .p-10 { padding: 1.5rem !important; }
+
+    /* Form elements touch-friendly */
+    input, select, textarea {
+        font-size: 16px !important;  /* Prevents iOS zoom */
+        padding: 0.85rem 1rem !important;
+        border-radius: 0.75rem !important;
+        min-height: 48px;
+    }
+    select { min-height: 50px; }
+    button, .btn-primary, [role="button"] {
+        min-height: 48px;
+        font-size: 0.8rem !important;
+        padding: 0.85rem 1.2rem !important;
+    }
+
+    /* Slot grid: 2 columns on mobile */
+    .grid-cols-3 { grid-template-columns: repeat(2, 1fr) !important; }
+    .slot { padding: 0.85rem 0.5rem !important; font-size: 0.75rem !important; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+
+    /* Tables: horizontal scroll + minimum column widths */
+    table { font-size: 0.7rem !important; }
+    th, td { padding: 0.5rem 0.35rem !important; white-space: nowrap; }
+    .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+
+    /* Payment page */
+    .text-3xl { font-size: 1.5rem !important; }
+
+    /* Mirror container on phones */
+    .mirror-container { min-height: 50vh; border-radius: 1rem; }
+    .mirror-controls { gap: 0.5rem; }
+    .mirror-controls .btn-primary { font-size: 0.85rem !important; }
+
+    /* AI Chat Widget mobile sizing */
+    .fixed.bottom-6.right-6 { bottom: 0.75rem !important; right: 0.75rem !important; }
+
+    /* Footer */
+    footer .text-7xl { font-size: 2rem !important; }
+    footer .px-12 { padding-left: 2rem !important; padding-right: 2rem !important; }
+
+    /* Preloader mobile */
+    .text-5xl { font-size: 1.8rem !important; }
+    .text-4xl { font-size: 1.6rem !important; }
+
+    /* Digital Twin canvas mobile */
+    #digital-twin-canvas { min-height: 250px !important; max-height: 300px !important; }
+
+    /* AI Concierge Orb: smaller on mobile */
+    #ai-orb-container { width: 4rem !important; height: 4rem !important; bottom: 5rem !important; right: 0.75rem !important; }
+
+    /* Watermark */
+    .watermark { font-size: 0.55rem !important; letter-spacing: 0.15em !important; }
+}
+
+/* -- Tablet Breakpoint (640px - 1023px) -- */
+@media (min-width: 640px) and (max-width: 1023px) {
+    h1 { font-size: 2.8rem !important; }
+    h2 { font-size: 2rem !important; }
+
+    .py-32 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+
+    /* AI Orb slightly smaller */
+    #ai-orb-container { width: 5rem !important; height: 5rem !important; }
+}
+
+/* -- Touch Device Enhancements -- */
+@media (hover: none) and (pointer: coarse) {
+    /* Disable 3D tilt effect on touch — causes jank */
+    .tilt-card {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Disable magnetic button effect on touch */
+    .magnetic {
+        transform: none !important;
+    }
+
+    /* Larger tap targets everywhere */
+    button, a, .slot, [role="button"], select, input {
+        min-height: 44px;
+    }
+
+    /* Ensure scrollable areas have momentum scroll */
+    .overflow-x-auto, .overflow-y-auto {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Make all interactive elements have active/pressed feedback */
+    button:active, a:active, .slot:active, [role="button"]:active {
+        transform: scale(0.97);
+        transition: transform 0.1s ease;
+    }
+}
+
+/* -- Safe area insets for notched phones -- */
+@supports (padding: env(safe-area-inset-bottom)) {
+    nav.fixed {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+    footer {
+        padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    }
+    #ai-orb-container {
+        bottom: max(1.5rem, env(safe-area-inset-bottom)) !important;
+    }
+}
+
+/* -- Chat widget mobile sizing -- */
+@media (max-width: 420px) {
+    .fixed.bottom-6.right-6 > div[class*="glass-panel"] {
+        width: calc(100vw - 2rem) !important;
+        height: 70vh !important;
+        max-height: 500px;
+    }
+}
+

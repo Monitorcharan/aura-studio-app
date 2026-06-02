@@ -183,8 +183,8 @@ export default function VirtualMirror() {
           animation: scan-laser 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
       `}</style>
-      <main className="relative py-24 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto">
-      <section className="glass-panel p-8 rounded-3xl border" style={{ borderColor: 'var(--surface-border)' }}>
+      <main className="relative py-24 px-4 sm:px-6 md:px-16 lg:px-24 max-w-7xl mx-auto">
+      <section className="glass-panel p-4 sm:p-8 rounded-2xl sm:rounded-3xl border" style={{ borderColor: 'var(--surface-border)' }}>
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-1/2 space-y-8">
             <div>
@@ -199,7 +199,7 @@ export default function VirtualMirror() {
               </p>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="grid gap-4 sm:gap-6 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="relative rounded-3xl overflow-hidden border border-[var(--surface-border)] bg-[var(--surface-bg)] mirror-container">
                 <Webcam
                   audio={false}
