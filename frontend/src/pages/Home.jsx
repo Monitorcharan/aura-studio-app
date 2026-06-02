@@ -305,6 +305,50 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Elite VIP Section */}
+      <section className="py-32 px-8 md:px-24 max-w-7xl mx-auto border-t" style={{ borderColor: 'var(--surface-border)' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <div className="text-yellow-400 font-mono text-xs uppercase tracking-[0.3em]">
+              VIP Subscription
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold font-display" style={{ color: 'var(--heading-color)' }}>
+              Aura <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-600">Elite</span>
+            </h2>
+            <p className="font-light leading-relaxed max-w-md" style={{ color: 'var(--text-muted)' }}>
+              Unlock the ultimate salon experience. Join Aura Elite to receive 20% off all bookings, jump to the front of the priority queue, and enjoy exclusive digital lookbook access.
+            </p>
+            <div className="pt-4">
+              <Link
+                to="/elite"
+                className="inline-block px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition duration-300 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black shadow-[0_0_20px_rgba(250,204,21,0.2)] hover:shadow-[0_0_30px_rgba(250,204,21,0.4)]"
+              >
+                Explore Elite Perks
+              </Link>
+            </div>
+          </div>
+          
+          <div className="flex justify-center lg:justify-end">
+            <div className="glass-panel p-8 rounded-3xl w-full max-w-sm border tilt-card flex flex-col items-center text-center" style={{ borderColor: 'var(--surface-border)', backgroundColor: 'var(--surface-bg)' }}>
+              <div className="w-16 h-16 rounded-full bg-yellow-400/10 flex items-center justify-center border border-yellow-400/30 mb-6">
+                <span className="text-2xl text-yellow-400">👑</span>
+              </div>
+              <h3 className="text-2xl font-bold font-display mb-2" style={{ color: 'var(--heading-color)' }}>Elite Access</h3>
+              <p className="text-sm font-light mb-6" style={{ color: 'var(--text-muted)' }}>30 days of VIP treatment</p>
+              <div className="mb-8">
+                <span className="text-4xl font-bold font-display" style={{ color: 'var(--heading-color)' }}>$49</span>
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}> / month</span>
+              </div>
+              <ul className="text-xs font-mono space-y-3 w-full text-left" style={{ color: 'var(--text-subtle)' }}>
+                <li className="flex gap-2">✓ <span className="text-white">20% off all services</span></li>
+                <li className="flex gap-2">✓ <span className="text-white">Priority bookings</span></li>
+                <li className="flex gap-2">✓ <span className="text-white">Lookbook consulting</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer CTA Section */}
       <footer className="py-24 px-8 md:px-24 relative" style={{ backgroundColor: 'var(--footer-bg)', borderTop: '1px solid var(--surface-border-subtle)' }}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
