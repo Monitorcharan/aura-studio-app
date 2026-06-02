@@ -41,7 +41,28 @@ def ask_ai():
     if not openai.api_key:
         return jsonify({"reply": get_simulated_response(last_message_text)}), 200
 
-    # Enforce system prompt behavior for OpenAI
+    # Clean the messages list to ensure it's valid for LLMs:
+    # 1. It must alternate starting with 'user'
+    # 2. Leading 'assistant' messages must be removed
+    cleaned_messages = []
+    for msg in messages:
+        role = msg.get("role")
+        content = msg.get("content")
+        if not role or not content:
+            continue
+        # Skip system prompts sent by client (we will inject our own)
+        if role == "system":
+            continue
+        cleaned_messages.append({"role": role, "content": content})
+
+    # Remove any leading assistant messages (like the greeting)
+    while cleaned_messages and cleaned_messages[0]["role"] == "assistant":
+        cleaned_messages.pop(0)
+
+    if not cleaned_messages:
+        return jsonify({"reply": get_simulated_response(last_message_text)}), 200
+
+    # Prepend the system prompt as the first message
     system_prompt = {
         "role": "system",
         "content": (
@@ -51,20 +72,22 @@ def ask_ai():
             "Always maintain a premium, futuristic, and helpful tone. Keep responses concise and engaging."
         )
     }
-
-    # Prepend the system prompt if not present
-    if not any(m.get("role") == "system" for m in messages):
-        messages.insert(0, system_prompt)
+    cleaned_messages.insert(0, system_prompt)
 
     try:
         response = openai.ChatCompletion.create(
             model=os.getenv("AI_CHAT_MODEL", "gpt-3.5-turbo"),
-            messages=messages,
+            messages=cleaned_messages,
             max_tokens=300,
-            temperature=0.7
+            temperature=0.7,
+            headers={
+                "HTTP-Referer": "https://aura-studio-app.onrender.com",
+                "X-Title": "Aura Studio"
+            }
         )
         
         reply = response.choices[0].message['content']
         return jsonify({"reply": reply}), 200
     except Exception as e:
+        print("AI Chat API Error:", e)
         return jsonify({"reply": get_simulated_response(last_message_text)}), 200

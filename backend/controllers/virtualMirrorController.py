@@ -223,7 +223,11 @@ def call_openai_recommendation(inputs: dict) -> dict:
         ],
         temperature=0.7,
         max_tokens=500,
-        n=1
+        n=1,
+        headers={
+            "HTTP-Referer": "https://aura-studio-app.onrender.com",
+            "X-Title": "Aura Studio"
+        }
     )
 
     raw_text = response.choices[0].message['content']
@@ -279,7 +283,11 @@ def call_openai_detection(image_data: str) -> dict:
                 }
             ],
             temperature=0.2,
-            max_tokens=200
+            max_tokens=200,
+            headers={
+                "HTTP-Referer": "https://aura-studio-app.onrender.com",
+                "X-Title": "Aura Studio"
+            }
         )
         raw_text = response.choices[0].message['content']
     except Exception as e:
