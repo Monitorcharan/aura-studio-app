@@ -130,8 +130,8 @@ export default function Invoice() {
                     </div>
                     <button
                       onClick={downloadInvoice}
-                      className="rounded-full bg-accentCyan px-8 py-4 font-bold uppercase tracking-[0.2em] hover:opacity-90 transition duration-300"
-                      style={{ color: '#000' }}
+                      className="rounded-full px-8 py-4 font-bold uppercase tracking-[0.2em] hover:opacity-90 transition duration-300"
+                      style={{ backgroundColor: 'var(--accent-cyan)', color: '#000' }}
                     >
                       Download Invoice
                     </button>

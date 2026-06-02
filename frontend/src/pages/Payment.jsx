@@ -171,8 +171,8 @@ export default function Payment() {
                   <div className="flex items-end">
                     <button
                       type="submit"
-                      className="w-full rounded-full bg-accentCyan py-4 font-bold uppercase tracking-[0.2em] hover:opacity-90 transition duration-300"
-                      style={{ color: '#000' }}
+                      className="w-full rounded-full py-4 font-bold uppercase tracking-[0.2em] hover:opacity-90 transition duration-300"
+                      style={{ backgroundColor: 'var(--accent-cyan)', color: '#000' }}
                     >
                       Pay Now
                     </button>
