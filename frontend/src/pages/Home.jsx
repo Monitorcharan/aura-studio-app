@@ -8,6 +8,13 @@ export default function Home() {
     const name = localStorage.getItem('userName');
     return name ? name.split(' ')[0] : '';
   });
+  const handleProtectedNavigation = (e, message) => {
+    if (!localStorage.getItem('authToken')) {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('show-auth-toast', { detail: { message } }));
+    }
+  };
+
   useEffect(() => {
     // 1. Text reveals and fade-ins after preloader is done
     const onPreloaderComplete = () => {
@@ -170,6 +177,7 @@ export default function Home() {
           </p>
           <Link
             to="/booking"
+            onClick={(e) => handleProtectedNavigation(e, "Login required to reserve a chair.")}
             className="glass-panel text-xs hover:opacity-90 transition duration-300 inline-flex items-center gap-3 w-max fade-in-up magnetic cursor-none px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold uppercase tracking-wider"
             style={{ color: 'var(--heading-color)', borderColor: 'var(--surface-border)' }}
           >
@@ -367,6 +375,7 @@ export default function Home() {
           
           <Link
             to="/booking"
+            onClick={(e) => handleProtectedNavigation(e, "Login required to book an appointment.")}
             className="text-sm uppercase tracking-widest font-bold px-8 sm:px-12 py-4 sm:py-5 rounded-full hover:bg-accentCyan hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition duration-500 magnetic cursor-none text-center"
             style={{ backgroundColor: 'var(--btn-bg)', color: 'var(--btn-text)' }}
           >

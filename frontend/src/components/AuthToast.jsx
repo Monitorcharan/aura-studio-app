@@ -1,39 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function AuthToast({ message = 'Login required to access this feature.', show = false, onClose }) {
+export default function AuthToast() {
   const [visible, setVisible] = useState(false);
   const [animating, setAnimating] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (show) {
+    const handleShowToast = (e) => {
+      setMessage(e.detail?.message || 'Login required to access this feature.');
       setVisible(true);
-      // Use setTimeout to ensure DOM is painted before triggering CSS transition
+      
       const enterTimer = setTimeout(() => {
         setAnimating(true);
       }, 50);
 
-      // Auto dismiss after 8 seconds (gives time to read after Preloader)
       const dismissTimer = setTimeout(() => {
         setAnimating(false);
         setTimeout(() => {
           setVisible(false);
-          if (onClose) onClose();
         }, 400);
       }, 8000);
 
-      return () => {
-        clearTimeout(enterTimer);
-        clearTimeout(dismissTimer);
-      };
-    }
-  }, [show, onClose]);
+      // Store timers to clear them if clicked again
+      window._authToastEnterTimer = enterTimer;
+      window._authToastDismissTimer = dismissTimer;
+    };
+
+    window.addEventListener('show-auth-toast', handleShowToast);
+    return () => {
+      window.removeEventListener('show-auth-toast', handleShowToast);
+      clearTimeout(window._authToastEnterTimer);
+      clearTimeout(window._authToastDismissTimer);
+    };
+  }, []);
+
 
   const handleDismiss = () => {
     setAnimating(false);
     setTimeout(() => {
       setVisible(false);
-      if (onClose) onClose();
     }, 400);
   };
 

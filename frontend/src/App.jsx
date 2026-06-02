@@ -4,6 +4,7 @@ import WebGLBackground from './components/WebGLBackground';
 import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
 import AIChatWidget from './components/AIChatWidget';
+import AuthToast from './components/AuthToast';
 
 // Page imports
 import Home from './pages/Home';
@@ -37,6 +38,8 @@ function App() {
 
         {/* Global Navbar Header */}
         <Navbar />
+
+        <AuthToast />
 
         {/* SPA Content container */}
         <div className="relative z-10 w-full">
