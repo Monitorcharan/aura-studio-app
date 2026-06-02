@@ -76,6 +76,19 @@ export default function Booking() {
     if (dateInput) {
       dateInput.setAttribute('min', todayStr);
     }
+
+    // Handle Lookbook deep link to Virtual Mirror
+    const queryParams = new URLSearchParams(window.location.search);
+    if (queryParams.get('openMirror') === 'true') {
+      const style = queryParams.get('style');
+      if (style) {
+        setOverlayStyle(style);
+      }
+      // slight delay to allow layout to mount
+      setTimeout(() => {
+        startCamera();
+      }, 500);
+    }
   }, [navigate]);
 
   // Load available slots when date shifts

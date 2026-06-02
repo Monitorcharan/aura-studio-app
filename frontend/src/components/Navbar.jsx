@@ -86,6 +86,9 @@ export default function Navbar() {
         <button onClick={() => scrollToSection('services')} className="transition cursor-none magnetic hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
           Services
         </button>
+        <Link to="/lookbook" className="transition cursor-none magnetic hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
+          Lookbook
+        </Link>
         <Link to="/virtual-mirror" className="transition cursor-none magnetic hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
           Virtual Mirror
         </Link>

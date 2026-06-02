@@ -18,6 +18,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
 import PaymentHistory from './pages/PaymentHistory';
 import VirtualMirror from './pages/VirtualMirror';
+import Lookbook from './pages/Lookbook';
 
 import './App.css';
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/payment-history" element={<PaymentHistory />} />
             <Route path="/confirmation" element={<Confirmation />} />
             <Route path="/virtual-mirror" element={<VirtualMirror />} />
+            <Route path="/lookbook" element={<Lookbook />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
           </Routes>
         </div>
