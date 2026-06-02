@@ -175,14 +175,24 @@ export default function Home() {
           <p className="text-base md:text-lg mb-10 max-w-md font-light leading-relaxed fade-in-up" style={{ color: 'var(--text-muted)' }}>
             Precision styling meets cinematic 3D presence. Walk in to define your future identity in a space designed for absolute details.
           </p>
-          <Link
-            to="/booking"
-            onClick={(e) => handleProtectedNavigation(e, "Login required to reserve a chair.")}
-            className="glass-panel text-xs hover:opacity-90 transition duration-300 inline-flex items-center gap-3 w-max fade-in-up magnetic cursor-none px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold uppercase tracking-wider"
-            style={{ color: 'var(--heading-color)', borderColor: 'var(--surface-border)' }}
-          >
-            Reserve a Chair <span className="text-accentCyan font-semibold">→</span>
-          </Link>
+          {!localStorage.getItem('authToken') ? (
+            <button
+              type="button"
+              onClick={(e) => handleProtectedNavigation(e, "Login required to reserve a chair.")}
+              className="glass-panel text-xs hover:opacity-90 transition duration-300 inline-flex items-center gap-3 w-max fade-in-up magnetic cursor-none px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold uppercase tracking-wider border text-left cursor-pointer"
+              style={{ color: 'var(--heading-color)', borderColor: 'var(--surface-border)', background: 'none' }}
+            >
+              Reserve a Chair <span className="text-accentCyan font-semibold">→</span>
+            </button>
+          ) : (
+            <Link
+              to="/booking"
+              className="glass-panel text-xs hover:opacity-90 transition duration-300 inline-flex items-center gap-3 w-max fade-in-up magnetic cursor-none px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold uppercase tracking-wider"
+              style={{ color: 'var(--heading-color)', borderColor: 'var(--surface-border)' }}
+            >
+              Reserve a Chair <span className="text-accentCyan font-semibold">→</span>
+            </Link>
+          )}
         </div>
       </header>
 
@@ -373,14 +383,24 @@ export default function Home() {
             </p>
           </div>
           
-          <Link
-            to="/booking"
-            onClick={(e) => handleProtectedNavigation(e, "Login required to book an appointment.")}
-            className="text-sm uppercase tracking-widest font-bold px-8 sm:px-12 py-4 sm:py-5 rounded-full hover:bg-accentCyan hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition duration-500 magnetic cursor-none text-center"
-            style={{ backgroundColor: 'var(--btn-bg)', color: 'var(--btn-text)' }}
-          >
-            Book A Chair Now
-          </Link>
+          {!localStorage.getItem('authToken') ? (
+            <button
+              type="button"
+              onClick={(e) => handleProtectedNavigation(e, "Login required to book an appointment.")}
+              className="text-sm uppercase tracking-widest font-bold px-8 sm:px-12 py-4 sm:py-5 rounded-full hover:bg-accentCyan hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition duration-500 magnetic cursor-none text-center border-none cursor-pointer"
+              style={{ backgroundColor: 'var(--btn-bg)', color: 'var(--btn-text)' }}
+            >
+              Book A Chair Now
+            </button>
+          ) : (
+            <Link
+              to="/booking"
+              className="text-sm uppercase tracking-widest font-bold px-8 sm:px-12 py-4 sm:py-5 rounded-full hover:bg-accentCyan hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition duration-500 magnetic cursor-none text-center"
+              style={{ backgroundColor: 'var(--btn-bg)', color: 'var(--btn-text)' }}
+            >
+              Book A Chair Now
+            </Link>
+          )}
         </div>
 
         <div className="max-w-7xl mx-auto mt-20 pt-8 flex flex-col sm:flex-row justify-between items-center text-xs gap-4 font-mono" style={{ borderTop: '1px solid var(--surface-border-subtle)', color: 'var(--text-subtle)' }}>

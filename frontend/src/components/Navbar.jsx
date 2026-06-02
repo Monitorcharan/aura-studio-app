@@ -102,14 +102,24 @@ export default function Navbar() {
         <Link to="/lookbook" className="transition cursor-none magnetic hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
           Lookbook
         </Link>
-        <Link 
-          to="/virtual-mirror" 
-          onClick={(e) => handleProtectedNavigation(e, "Sign in to use the Virtual Mirror and get AI-powered style recommendations.")}
-          className="transition cursor-none magnetic hover:opacity-80 flex items-center gap-2" 
-          style={{ color: 'var(--text-muted)' }}
-        >
-          Virtual Mirror <span className="text-[10px] bg-accentPurple/20 text-accentPurple px-2 py-0.5 rounded-full" style={{ lineHeight: 1 }}>AI</span>
-        </Link>
+        {!isLoggedIn ? (
+          <button 
+            type="button"
+            onClick={(e) => handleProtectedNavigation(e, "Sign in to use the Virtual Mirror and get AI-powered style recommendations.")}
+            className="transition cursor-none magnetic hover:opacity-80 flex items-center gap-2 text-left uppercase font-semibold border-none bg-transparent p-0 cursor-pointer" 
+            style={{ color: 'var(--text-muted)', font: 'inherit' }}
+          >
+            Virtual Mirror <span className="text-[10px] bg-accentPurple/20 text-accentPurple px-2 py-0.5 rounded-full" style={{ lineHeight: 1 }}>AI</span>
+          </button>
+        ) : (
+          <Link 
+            to="/virtual-mirror" 
+            className="transition cursor-none magnetic hover:opacity-80 flex items-center gap-2" 
+            style={{ color: 'var(--text-muted)' }}
+          >
+            Virtual Mirror <span className="text-[10px] bg-accentPurple/20 text-accentPurple px-2 py-0.5 rounded-full" style={{ lineHeight: 1 }}>AI</span>
+          </Link>
+        )}
         <div className="w-px h-4 mx-1" style={{ backgroundColor: 'var(--surface-border)' }}></div>
         
         {isLoggedIn ? (
@@ -171,20 +181,38 @@ export default function Navbar() {
           )}
         </button>
 
-        <Link 
-          to="/booking" 
-          onClick={(e) => handleProtectedNavigation(e, "Login required to book an appointment.")}
-          className="btn-primary hidden md:inline-flex"
-        >
-          Book Now
-        </Link>
-        <Link 
-          to="/booking" 
-          onClick={(e) => handleProtectedNavigation(e, "Login required to book an appointment.")}
-          className="btn-primary md:hidden px-4 text-[10px]"
-        >
-          Book
-        </Link>
+        {!isLoggedIn ? (
+          <button 
+            type="button"
+            onClick={(e) => handleProtectedNavigation(e, "Login required to book an appointment.")}
+            className="btn-primary hidden md:inline-flex cursor-pointer"
+          >
+            Book Now
+          </button>
+        ) : (
+          <Link 
+            to="/booking" 
+            className="btn-primary hidden md:inline-flex"
+          >
+            Book Now
+          </Link>
+        )}
+        {!isLoggedIn ? (
+          <button 
+            type="button"
+            onClick={(e) => handleProtectedNavigation(e, "Login required to book an appointment.")}
+            className="btn-primary md:hidden px-4 text-[10px] cursor-pointer"
+          >
+            Book
+          </button>
+        ) : (
+          <Link 
+            to="/booking" 
+            className="btn-primary md:hidden px-4 text-[10px]"
+          >
+            Book
+          </Link>
+        )}
         
         <button className="md:hidden p-2 flex items-center justify-center transition-colors" style={{ color: 'var(--heading-color)' }} onClick={toggleMobileMenu}>
           {mobileMenuOpen ? (
@@ -201,18 +229,27 @@ export default function Navbar() {
           <button onClick={() => { scrollToSection('philosophy'); setMobileMenuOpen(false); }} className="text-left" style={{ color: 'var(--heading-color)' }}>Philosophy</button>
           <button onClick={() => { scrollToSection('services'); setMobileMenuOpen(false); }} className="text-left" style={{ color: 'var(--heading-color)' }}>Services</button>
           <Link to="/lookbook" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Lookbook</Link>
-          <Link 
-            to="/virtual-mirror" 
-            onClick={(e) => {
-              if (!isLoggedIn) {
+          {!isLoggedIn ? (
+            <button 
+              type="button"
+              onClick={(e) => {
                 handleProtectedNavigation(e, "Sign in to use the Virtual Mirror and get AI-powered style recommendations.");
-              }
-              setMobileMenuOpen(false);
-            }} 
-            style={{ color: 'var(--heading-color)' }}
-          >
-            Virtual Mirror
-          </Link>
+                setMobileMenuOpen(false);
+              }} 
+              className="text-left uppercase font-semibold border-none bg-transparent p-0 cursor-pointer"
+              style={{ color: 'var(--heading-color)', font: 'inherit' }}
+            >
+              Virtual Mirror
+            </button>
+          ) : (
+            <Link 
+              to="/virtual-mirror" 
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ color: 'var(--heading-color)' }}
+            >
+              Virtual Mirror
+            </Link>
+          )}
           <div className="h-px w-full" style={{ backgroundColor: 'var(--surface-border)' }}></div>
           {isLoggedIn ? (
             <>

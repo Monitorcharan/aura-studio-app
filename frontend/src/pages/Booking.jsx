@@ -55,7 +55,8 @@ export default function Booking() {
     const activeUserId = localStorage.getItem('userId');
     const activeTier = localStorage.getItem('membership_tier') || 'standard';
     
-    if (!authToken) {
+    if (!authToken || authToken === 'undefined' || authToken === 'null') {
+      localStorage.removeItem('authToken');
       navigate('/login');
       return;
     }

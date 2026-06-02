@@ -27,6 +27,13 @@ export default function Lookbook() {
   const navigate = useNavigate();
 
   const handleTryLook = (styleId) => {
+    const token = localStorage.getItem('authToken');
+    if (!token || token === 'undefined' || token === 'null') {
+      window.dispatchEvent(new CustomEvent('show-auth-toast', { 
+        detail: { message: "Sign in to use the Virtual Mirror and try on signature looks." } 
+      }));
+      return;
+    }
     navigate(`/booking?openMirror=true&style=${styleId}`);
   };
 

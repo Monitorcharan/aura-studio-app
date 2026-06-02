@@ -60,7 +60,8 @@ export default function VirtualMirror() {
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
+    if (!authToken || authToken === 'undefined' || authToken === 'null') {
+      localStorage.removeItem('authToken');
       navigate('/login');
       return;
     }
