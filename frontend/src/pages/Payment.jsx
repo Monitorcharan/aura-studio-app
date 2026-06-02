@@ -179,19 +179,19 @@ export default function Payment() {
                 </div>
               </div>
 
-                <div className="pt-4">
-                  <button
-                    type="submit"
-                    className="w-full rounded-full py-5 font-bold uppercase tracking-[0.2em] hover:opacity-90 transition duration-300 flex items-center justify-center gap-3"
-                    style={{ backgroundColor: 'var(--accent-cyan)', color: '#000' }}
-                  >
-                    Pay with Razorpay <span className="text-xl">💳</span>
-                  </button>
-                  <p className="text-center mt-4 text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-subtle)' }}>
-                    Secured by Razorpay Encryption
-                  </p>
-                </div>
-              </form>
+              <div className="pt-4">
+                <button
+                  type="button"
+                  onClick={handlePayment}
+                  className="w-full rounded-full py-5 font-bold uppercase tracking-[0.2em] hover:opacity-90 transition duration-300 flex items-center justify-center gap-3"
+                  style={{ backgroundColor: 'var(--accent-cyan)', color: '#000' }}
+                >
+                  Pay with Razorpay <span className="text-xl">💳</span>
+                </button>
+                <p className="text-center mt-4 text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-subtle)' }}>
+                  Secured by Razorpay Encryption
+                </p>
+              </div>
 
               {errorMessage && <p className="text-rose-400 mt-4">{errorMessage}</p>}
               {statusMessage && <p className="text-emerald-300 mt-4">{statusMessage}</p>}
