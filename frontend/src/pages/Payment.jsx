@@ -13,10 +13,6 @@ export default function Payment() {
   const [appointmentTime, setAppointmentTime] = useState('');
   const [appointmentToken, setAppointmentToken] = useState('');
   const [amount, setAmount] = useState('0');
-  const [cardholderName, setCardholderName] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiry, setExpiry] = useState('');
-  const [cvv, setCvv] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -45,46 +41,106 @@ export default function Payment() {
     );
   }, []);
 
-  const handlePayment = (e) => {
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handlePayment = async (e) => {
     e.preventDefault();
     setStatusMessage('');
     setErrorMessage('');
 
-    if (!appointmentId || !cardholderName || !cardNumber || !expiry || !cvv) {
-      setErrorMessage('Please fill in all payment fields.');
+    if (!appointmentId) {
+      setErrorMessage('Appointment ID missing.');
       return;
     }
 
-    fetch('/api/payments/process', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        appointment_id: appointmentId,
-        payment_method: 'card',
-        amount,
-        cardholder_name: cardholderName,
-        card_number: cardNumber,
-        expiry,
-        cvv
-      })
-    })
-      .then((res) => res.json().then((data) => ({ status: res.status, body: data })))
-      .then(({ status, body }) => {
-        if (status === 200 && body.payment_id) {
-          setStatusMessage('Payment confirmed. Generating your invoice...');
-          setTimeout(() => {
-            navigate(`/invoice?payment_id=${body.payment_id}`);
-          }, 900);
-        } else {
-          setErrorMessage(body.message || 'Payment failed.');
-        }
-      })
-      .catch((err) => {
-        setErrorMessage(`Connection error: ${err.message}`);
+    setStatusMessage('Initializing secure gateway...');
+    const res = await loadRazorpay();
+    if (!res) {
+      setErrorMessage('Failed to load Razorpay SDK. Check your connection.');
+      setStatusMessage('');
+      return;
+    }
+
+    try {
+      const orderRes = await fetch('/api/payments/create-razorpay-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ appointment_id: appointmentId })
       });
+      
+      const orderData = await orderRes.json();
+      if (!orderRes.ok) {
+        throw new Error(orderData.message || 'Failed to create order');
+      }
+
+      setStatusMessage('Waiting for payment confirmation...');
+
+      const options = {
+        key: orderData.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Aura Studio",
+        description: `Payment for ${serviceName}`,
+        order_id: orderData.order_id,
+        theme: {
+          color: "#00F0FF"
+        },
+        handler: async function (response) {
+          setStatusMessage('Verifying cryptographic signature...');
+          try {
+            const verifyRes = await fetch('/api/payments/verify-razorpay', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                appointment_id: appointmentId
+              })
+            });
+            const verifyData = await verifyRes.json();
+            
+            if (verifyRes.ok) {
+              setStatusMessage('Payment confirmed. Generating your invoice...');
+              setTimeout(() => {
+                navigate(`/invoice?payment_id=${verifyData.payment_id}`);
+              }, 900);
+            } else {
+              setErrorMessage(verifyData.message || 'Payment verification failed.');
+              setStatusMessage('');
+            }
+          } catch (err) {
+            setErrorMessage('Network error during verification.');
+            setStatusMessage('');
+          }
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response){
+        setErrorMessage(response.error.description || 'Payment failed');
+        setStatusMessage('');
+      });
+      rzp.open();
+      
+    } catch (err) {
+      setErrorMessage(`Connection error: ${err.message}`);
+      setStatusMessage('');
+    }
   };
 
   const inputStyle = {
@@ -123,60 +179,17 @@ export default function Payment() {
                 </div>
               </div>
 
-              <form onSubmit={handlePayment} className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <label className="block">
-                    <span className="text-xs uppercase tracking-[0.2em]" style={{ color: 'var(--text-muted)' }}>Cardholder name</span>
-                    <input
-                      value={cardholderName}
-                      onChange={(e) => setCardholderName(e.target.value)}
-                      className="mt-2 w-full rounded-3xl px-4 py-4 outline-none focus:border-accentCyan"
-                      placeholder="Jane Doe"
-                      style={inputStyle}
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="text-xs uppercase tracking-[0.2em]" style={{ color: 'var(--text-muted)' }}>Card number</span>
-                    <input
-                      value={cardNumber}
-                      onChange={(e) => setCardNumber(e.target.value)}
-                      className="mt-2 w-full rounded-3xl px-4 py-4 outline-none focus:border-accentCyan"
-                      placeholder="1234 5678 9012 3456"
-                      style={inputStyle}
-                    />
-                  </label>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-3">
-                  <label className="block">
-                    <span className="text-xs uppercase tracking-[0.2em]" style={{ color: 'var(--text-muted)' }}>Expiry</span>
-                    <input
-                      value={expiry}
-                      onChange={(e) => setExpiry(e.target.value)}
-                      className="mt-2 w-full rounded-3xl px-4 py-4 outline-none focus:border-accentCyan"
-                      placeholder="MM/YY"
-                      style={inputStyle}
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="text-xs uppercase tracking-[0.2em]" style={{ color: 'var(--text-muted)' }}>CVV</span>
-                    <input
-                      value={cvv}
-                      onChange={(e) => setCvv(e.target.value)}
-                      className="mt-2 w-full rounded-3xl px-4 py-4 outline-none focus:border-accentCyan"
-                      placeholder="123"
-                      style={inputStyle}
-                    />
-                  </label>
-                  <div className="flex items-end">
-                    <button
-                      type="submit"
-                      className="w-full rounded-full py-4 font-bold uppercase tracking-[0.2em] hover:opacity-90 transition duration-300"
-                      style={{ backgroundColor: 'var(--accent-cyan)', color: '#000' }}
-                    >
-                      Pay Now
-                    </button>
-                  </div>
+                <div className="pt-4">
+                  <button
+                    type="submit"
+                    className="w-full rounded-full py-5 font-bold uppercase tracking-[0.2em] hover:opacity-90 transition duration-300 flex items-center justify-center gap-3"
+                    style={{ backgroundColor: 'var(--accent-cyan)', color: '#000' }}
+                  >
+                    Pay with Razorpay <span className="text-xl">💳</span>
+                  </button>
+                  <p className="text-center mt-4 text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-subtle)' }}>
+                    Secured by Razorpay Encryption
+                  </p>
                 </div>
               </form>
 

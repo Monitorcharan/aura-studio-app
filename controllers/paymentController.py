@@ -3,6 +3,8 @@ from config import db
 from bson import ObjectId
 from datetime import datetime
 import secrets
+import os
+import razorpay
 
 appointments = db["appointments"]
 services = db["services"]
@@ -10,12 +12,9 @@ users = db["users"]
 payments = db["payments"]
 
 
-def process_payment():
+def create_razorpay_order():
     data = request.json or {}
     appointment_id = data.get("appointment_id")
-    payment_method = data.get("payment_method", "card")
-    amount = data.get("amount")
-    cardholder_name = data.get("cardholder_name", "Card Holder")
 
     if not appointment_id:
         return jsonify({"message": "Appointment ID is required"}), 400
@@ -32,46 +31,106 @@ def process_payment():
         return jsonify({"message": "Cannot pay for a cancelled appointment"}), 400
 
     if appointment.get("payment_id"):
-        return jsonify({"message": "Payment has already been processed for this appointment"}), 400
+        return jsonify({"message": "Payment has already been processed"}), 400
 
     service = services.find_one({"_id": ObjectId(appointment["service_id"])})
-    user = users.find_one({"_id": ObjectId(appointment["user_id"])})
+    if not service:
+        return jsonify({"message": "Linked service is invalid"}), 400
 
-    if not service or not user:
-        return jsonify({"message": "Linked appointment record is invalid"}), 400
-
-    if amount is None:
-        amount = service.get("price", 0)
-
+    amount = service.get("price", 0)
     try:
         amount = float(amount)
     except (ValueError, TypeError):
-        amount = float(service.get("price", 0))
+        amount = 0.0
 
-    payment_id = secrets.token_hex(10).upper()
+    # Initialize Razorpay Client
+    key_id = os.getenv("RAZORPAY_KEY_ID")
+    key_secret = os.getenv("RAZORPAY_KEY_SECRET")
+    
+    if not key_id or not key_secret:
+        return jsonify({"message": "Razorpay keys not configured on server"}), 500
+
+    client = razorpay.Client(auth=(key_id, key_secret))
+    
+    # Amount is in paise
+    order_amount = int(amount * 100)
+    order_currency = "USD" # Assuming USD based on the rest of the app, change to INR if needed
+    order_receipt = f"rcpt_{appointment_id[:8]}"
+
+    try:
+        razorpay_order = client.order.create({
+            "amount": order_amount,
+            "currency": order_currency,
+            "receipt": order_receipt,
+            "notes": {
+                "appointment_id": appointment_id
+            }
+        })
+        
+        return jsonify({
+            "order_id": razorpay_order["id"],
+            "amount": order_amount,
+            "currency": order_currency,
+            "key_id": key_id
+        }), 200
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
+
+def verify_razorpay_payment():
+    data = request.json or {}
+    razorpay_payment_id = data.get("razorpay_payment_id")
+    razorpay_order_id = data.get("razorpay_order_id")
+    razorpay_signature = data.get("razorpay_signature")
+    appointment_id = data.get("appointment_id")
+    
+    if not razorpay_payment_id or not razorpay_order_id or not razorpay_signature or not appointment_id:
+        return jsonify({"message": "Missing payment verification parameters"}), 400
+
+    key_id = os.getenv("RAZORPAY_KEY_ID")
+    key_secret = os.getenv("RAZORPAY_KEY_SECRET")
+    client = razorpay.Client(auth=(key_id, key_secret))
+
+    try:
+        # This will throw a SignatureVerificationError if invalid
+        client.utility.verify_payment_signature({
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_payment_id': razorpay_payment_id,
+            'razorpay_signature': razorpay_signature
+        })
+    except Exception as e:
+        return jsonify({"message": "Payment verification failed", "error": str(e)}), 400
+
+    # Payment is valid, save to DB
+    appointment = appointments.find_one({"_id": ObjectId(appointment_id)})
+    if not appointment:
+        return jsonify({"message": "Appointment not found"}), 404
+        
+    service = services.find_one({"_id": ObjectId(appointment["service_id"])})
+    amount = float(service.get("price", 0)) if service else 0.0
+    
     invoice_number = f"INV-{secrets.token_hex(4).upper()}"
-    qr_payload = f"AURA|{payment_id}|{appointment_id}|{str(user['_id'])}"
+    qr_payload = f"AURA|{razorpay_payment_id}|{appointment_id}|{str(appointment['user_id'])}"
 
     payment = {
-        "payment_id": payment_id,
+        "payment_id": razorpay_payment_id,
+        "order_id": razorpay_order_id,
         "appointment_id": appointment["_id"],
         "user_id": appointment["user_id"],
         "service_id": appointment["service_id"],
         "amount": amount,
-        "payment_method": payment_method,
-        "cardholder_name": cardholder_name,
+        "payment_method": "razorpay",
         "status": "paid",
         "invoice_number": invoice_number,
         "created_at": datetime.utcnow(),
         "qr_payload": qr_payload
     }
-
     payments.insert_one(payment)
 
     appointments.update_one(
         {"_id": appointment["_id"]},
         {"$set": {
-            "payment_id": payment_id,
+            "payment_id": razorpay_payment_id,
             "payment_status": "paid",
             "status": "confirmed",
             "updated_at": datetime.utcnow()
@@ -79,10 +138,9 @@ def process_payment():
     )
 
     return jsonify({
-        "message": "Payment processed successfully",
-        "payment_id": payment_id,
-        "invoice_number": invoice_number,
-        "qr_payload": qr_payload
+        "message": "Payment verified successfully",
+        "payment_id": razorpay_payment_id,
+        "invoice_number": invoice_number
     }), 200
 
 

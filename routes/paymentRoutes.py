@@ -1,13 +1,18 @@
 from flask import Blueprint
-from controllers.paymentController import process_payment, get_payment_invoice, get_payment_history
+from controllers.paymentController import create_razorpay_order, verify_razorpay_payment, get_payment_invoice, get_payment_history
 from middlewares.authMiddleware import token_required
 
 payment_bp = Blueprint('payment', __name__)
 
-@payment_bp.route('/payments/process', methods=['POST'])
+@payment_bp.route('/payments/create-razorpay-order', methods=['POST'])
 @token_required
-def pay():
-    return process_payment()
+def create_order():
+    return create_razorpay_order()
+
+@payment_bp.route('/payments/verify-razorpay', methods=['POST'])
+@token_required
+def verify_payment():
+    return verify_razorpay_payment()
 
 @payment_bp.route('/payments/<payment_id>/invoice', methods=['GET'])
 @token_required
