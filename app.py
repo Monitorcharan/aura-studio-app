@@ -66,4 +66,4 @@ except Exception as e:
     print('Warning: ensure_admin_exists failed:', e)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=os.getenv('FLASK_DEBUG', 'False').lower() == 'true')

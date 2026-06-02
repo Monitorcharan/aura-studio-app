@@ -13,7 +13,7 @@ def book_appointment():
     """Book a new appointment"""
     data = request.json
 
-    user_id = data.get("user_id")
+    user_id = getattr(request, 'user_id', None)
     service_id = data.get("service_id")
     appointment_date = data.get("appointment_date")
     appointment_time = data.get("appointment_time")
@@ -68,7 +68,7 @@ def book_appointment():
 
 def get_appointments():
     """Get all appointments for a user"""
-    user_id = getattr(request, 'user_id', None) or request.args.get("user_id")
+    user_id = getattr(request, 'user_id', None)
 
     if not user_id:
         return jsonify({
@@ -127,6 +127,11 @@ def update_appointment(appointment_id):
                 "message": "Appointment not found"
             }), 404
 
+        user_id = getattr(request, 'user_id', None)
+        user_role = getattr(request, 'user_role', 'user')
+        if str(appointment["user_id"]) != str(user_id) and user_role != "admin":
+            return jsonify({"message": "Unauthorized access to modify this appointment"}), 403
+
         update_data = {
             "updated_at": datetime.utcnow()
         }
@@ -162,6 +167,11 @@ def cancel_appointment(appointment_id):
             return jsonify({
                 "message": "Appointment not found"
             }), 404
+
+        user_id = getattr(request, 'user_id', None)
+        user_role = getattr(request, 'user_role', 'user')
+        if str(appointment["user_id"]) != str(user_id) and user_role != "admin":
+            return jsonify({"message": "Unauthorized access to cancel this appointment"}), 403
 
         appointments.update_one(
             {"_id": ObjectId(appointment_id)},
