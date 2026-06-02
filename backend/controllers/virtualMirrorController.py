@@ -210,10 +210,13 @@ def call_openai_recommendation(inputs: dict) -> dict:
         raise RuntimeError('OPENAI_API_KEY is not configured')
 
     openai.api_key = api_key
+    openai_base = os.getenv("OPENAI_API_BASE")
+    if openai_base:
+        openai.api_base = openai_base
     prompt = build_prompt(inputs)
 
     response = openai.ChatCompletion.create(
-        model='gpt-4o',
+        model=os.getenv('AI_CHAT_MODEL', 'gpt-4o'),
         messages=[
             {'role': 'system', 'content': 'You are a master hairstylist and aesthetic consultant with deep knowledge of face shapes and hair behavior.'},
             {'role': 'user', 'content': prompt}
@@ -242,6 +245,9 @@ def call_openai_detection(image_data: str) -> dict:
         raise RuntimeError('OPENAI_API_KEY is not configured')
 
     openai.api_key = api_key
+    openai_base = os.getenv("OPENAI_API_BASE")
+    if openai_base:
+        openai.api_base = openai_base
     prompt_text = (
         'You are an expert facial physiognomy analyst and master hairstylist. '
         'I have provided an image of a person. Please perform a highly accurate analysis of their facial features and hair.\n\n'
@@ -253,7 +259,7 @@ def call_openai_detection(image_data: str) -> dict:
 
     try:
         response = openai.ChatCompletion.create(
-            model='gpt-4o',
+            model=os.getenv('AI_VISION_MODEL', 'gpt-4o'),
             messages=[
                 {
                     'role': 'user',

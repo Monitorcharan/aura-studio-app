@@ -5,6 +5,9 @@ from flask import request, jsonify
 
 # Ensure the OpenAI API key is configured from the environment
 openai.api_key = os.getenv("OPENAI_API_KEY")
+openai_base = os.getenv("OPENAI_API_BASE")
+if openai_base:
+    openai.api_base = openai_base
 
 def get_simulated_response(last_message):
     last_message = last_message.lower()
@@ -55,7 +58,7 @@ def ask_ai():
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model=os.getenv("AI_CHAT_MODEL", "gpt-3.5-turbo"),
             messages=messages,
             max_tokens=300,
             temperature=0.7
