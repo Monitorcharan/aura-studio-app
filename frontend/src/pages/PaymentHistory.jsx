@@ -5,15 +5,14 @@ import Preloader from '../components/Preloader';
 
 export default function PaymentHistory() {
   const navigate = useNavigate();
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(null);
   const [payments, setPayments] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setErrorMessage('Login required. Redirecting...');
-      setTimeout(() => navigate('/login'), 1500);
+      navigate('/login');
       return;
     }
     setToken(authToken);
@@ -40,6 +39,8 @@ export default function PaymentHistory() {
       })
       .catch((err) => setErrorMessage(err.message));
   };
+
+  if (!token) return null;
 
   return (
     <>

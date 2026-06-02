@@ -51,17 +51,16 @@ export default function Booking() {
   const dragStartRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    const activeToken = localStorage.getItem('authToken');
+    const authToken = localStorage.getItem('authToken');
     const activeUserId = localStorage.getItem('userId');
     const activeTier = localStorage.getItem('membership_tier') || 'standard';
-    if (!activeToken) {
-      setErrorMessage('Unauthenticated. Redirecting to login portal...');
-      setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+    
+    if (!authToken) {
+      navigate('/login');
       return;
     }
-    setToken(activeToken);
+    
+    setToken(authToken);
     setUserId(activeUserId);
     setMembershipTier(activeTier);
 
@@ -379,6 +378,8 @@ export default function Booking() {
     borderColor: 'var(--input-border)',
     color: 'var(--text-color)'
   };
+
+  if (!token) return null;
 
   return (
     <>

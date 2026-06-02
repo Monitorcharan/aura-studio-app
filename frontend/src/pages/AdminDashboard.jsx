@@ -5,7 +5,7 @@ import Preloader from '../components/Preloader';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(null);
   
   // Dashboard Tabs
   const [activeTab, setActiveTab] = useState('services');
@@ -32,10 +32,7 @@ export default function AdminDashboard() {
     const activeToken = localStorage.getItem('authToken');
     const activeRole = localStorage.getItem('userRole');
     if (!activeToken || activeRole !== 'admin') {
-      setErrorMessage('Admin access required. Redirecting...');
-      setTimeout(() => {
-        navigate('/admin-login');
-      }, 1500);
+      navigate('/admin-login');
       return;
     }
     setToken(activeToken);
@@ -250,6 +247,8 @@ export default function AdminDashboard() {
     borderColor: 'var(--input-border)',
     color: 'var(--text-color)'
   };
+
+  if (!token) return null;
 
   return (
     <>

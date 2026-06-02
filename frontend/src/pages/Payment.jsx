@@ -19,8 +19,7 @@ export default function Payment() {
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setErrorMessage('Authentication required. Redirecting to login...');
-      setTimeout(() => navigate('/login'), 1500);
+      navigate('/login');
       return;
     }
     setToken(authToken);
@@ -85,6 +84,8 @@ export default function Payment() {
     borderColor: 'var(--input-border)',
     color: 'var(--text-color)'
   };
+
+  if (!token) return null;
 
   return (
     <>

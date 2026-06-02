@@ -5,7 +5,7 @@ import Preloader from '../components/Preloader';
 
 export default function AuraElite() {
   const navigate = useNavigate();
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isElite, setIsElite] = useState(false);
@@ -63,6 +63,8 @@ export default function AuraElite() {
       setStatusMessage('');
     }
   };
+
+  if (!token) return null;
 
   return (
     <>

@@ -5,7 +5,7 @@ import Preloader from '../components/Preloader';
 
 export default function Profile() {
   const navigate = useNavigate();
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(null);
   const [profile, setProfile] = useState(null);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -15,8 +15,7 @@ export default function Profile() {
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setErrorMessage('Login required. Redirecting...');
-      setTimeout(() => navigate('/login'), 1500);
+      navigate('/login');
       return;
     }
     setToken(authToken);
@@ -77,6 +76,8 @@ export default function Profile() {
     borderColor: 'var(--input-border)',
     color: 'var(--text-color)'
   };
+
+  if (!token) return null;
 
   return (
     <>

@@ -56,13 +56,15 @@ export default function VirtualMirror() {
   const [detectedInfo, setDetectedInfo] = useState(null);
   const [error, setError] = useState('');
   const [facingMode, setFacingMode] = useState('user');
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setError('Authentication required. Redirecting to login...');
-      setTimeout(() => navigate('/login'), 1500);
+      navigate('/login');
+      return;
     }
+    setToken(authToken);
   }, [navigate]);
 
   const handleChange = (key, value) => {
@@ -169,6 +171,10 @@ export default function VirtualMirror() {
       setLoading(false);
     }
   };
+
+  if (!token) {
+    return null; // Don't render UI at all if no token
+  }
 
   return (
     <>

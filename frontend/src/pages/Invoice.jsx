@@ -7,7 +7,7 @@ import Preloader from '../components/Preloader';
 export default function Invoice() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(null);
   const [paymentId, setPaymentId] = useState('');
   const [invoice, setInvoice] = useState(null);
   const [qrUrl, setQrUrl] = useState('');
@@ -16,8 +16,7 @@ export default function Invoice() {
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setErrorMessage('Authentication required. Redirecting to login...');
-      setTimeout(() => navigate('/login'), 1500);
+      navigate('/login');
       return;
     }
     setToken(authToken);
@@ -66,6 +65,8 @@ export default function Invoice() {
   const downloadInvoice = () => {
     window.print();
   };
+
+  if (!token) return null;
 
   return (
     <>
