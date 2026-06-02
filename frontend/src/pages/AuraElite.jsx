@@ -29,31 +29,15 @@ export default function AuraElite() {
     );
   }, [navigate]);
 
-  const loadRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
-
   const handleSubscribe = async () => {
     if (isElite) return;
     setStatusMessage('');
     setErrorMessage('');
 
-    setStatusMessage('Initializing secure gateway...');
-    const res = await loadRazorpay();
-    if (!res) {
-      setErrorMessage('Failed to load Razorpay SDK. Check your connection.');
-      setStatusMessage('');
-      return;
-    }
+    setStatusMessage('Processing subscription...');
 
     try {
-      const orderRes = await fetch('/api/membership/create-order', {
+      const orderRes = await fetch('/api/membership/simulate-purchase', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,64 +47,16 @@ export default function AuraElite() {
       
       const orderData = await orderRes.json();
       if (!orderRes.ok) {
-        throw new Error(orderData.message || 'Failed to create order');
+        throw new Error(orderData.message || 'Failed to process subscription');
       }
 
-      setStatusMessage('Waiting for payment confirmation...');
-
-      const options = {
-        key: orderData.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: "Aura Studio",
-        description: `Aura Elite - 30 Day Access`,
-        order_id: orderData.order_id,
-        theme: {
-          color: "#D4AF37" // Gold theme for Elite
-        },
-        handler: async function (response) {
-          setStatusMessage('Verifying subscription...');
-          try {
-            const verifyRes = await fetch('/api/membership/verify-payment', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-              },
-              body: JSON.stringify({
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature
-              })
-            });
-            const verifyData = await verifyRes.json();
-            
-            if (verifyRes.ok) {
-              setStatusMessage('Welcome to Aura Elite!');
-              setIsElite(true);
-              localStorage.setItem('membership_tier', 'elite');
-              // trigger navbar update if we listen to storage, or just simple dispatch
-              window.dispatchEvent(new Event('auth-change')); 
-              setTimeout(() => {
-                navigate('/profile');
-              }, 1500);
-            } else {
-              setErrorMessage(verifyData.message || 'Subscription verification failed.');
-              setStatusMessage('');
-            }
-          } catch (err) {
-            setErrorMessage('Network error during verification.');
-            setStatusMessage('');
-          }
-        }
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', function (response){
-        setErrorMessage(response.error.description || 'Payment failed');
-        setStatusMessage('');
-      });
-      rzp.open();
+      setStatusMessage('Welcome to Aura Elite!');
+      setIsElite(true);
+      localStorage.setItem('membership_tier', 'elite');
+      window.dispatchEvent(new Event('auth-change')); 
+      setTimeout(() => {
+        navigate('/profile');
+      }, 1500);
       
     } catch (err) {
       setErrorMessage(`Connection error: ${err.message}`);

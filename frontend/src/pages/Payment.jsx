@@ -41,16 +41,6 @@ export default function Payment() {
     );
   }, []);
 
-  const loadRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
-
   const handlePayment = async (e) => {
     e.preventDefault();
     setStatusMessage('');
@@ -61,16 +51,10 @@ export default function Payment() {
       return;
     }
 
-    setStatusMessage('Initializing secure gateway...');
-    const res = await loadRazorpay();
-    if (!res) {
-      setErrorMessage('Failed to load Razorpay SDK. Check your connection.');
-      setStatusMessage('');
-      return;
-    }
+    setStatusMessage('Processing secure payment simulation...');
 
     try {
-      const orderRes = await fetch('/api/payments/create-razorpay-order', {
+      const orderRes = await fetch('/api/payments/simulate-payment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,61 +65,13 @@ export default function Payment() {
       
       const orderData = await orderRes.json();
       if (!orderRes.ok) {
-        throw new Error(orderData.message || 'Failed to create order');
+        throw new Error(orderData.message || 'Failed to process payment');
       }
 
-      setStatusMessage('Waiting for payment confirmation...');
-
-      const options = {
-        key: orderData.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: "Aura Studio",
-        description: `Payment for ${serviceName}`,
-        order_id: orderData.order_id,
-        theme: {
-          color: "#00F0FF"
-        },
-        handler: async function (response) {
-          setStatusMessage('Verifying cryptographic signature...');
-          try {
-            const verifyRes = await fetch('/api/payments/verify-razorpay', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-              },
-              body: JSON.stringify({
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature,
-                appointment_id: appointmentId
-              })
-            });
-            const verifyData = await verifyRes.json();
-            
-            if (verifyRes.ok) {
-              setStatusMessage('Payment confirmed. Generating your invoice...');
-              setTimeout(() => {
-                navigate(`/invoice?payment_id=${verifyData.payment_id}`);
-              }, 900);
-            } else {
-              setErrorMessage(verifyData.message || 'Payment verification failed.');
-              setStatusMessage('');
-            }
-          } catch (err) {
-            setErrorMessage('Network error during verification.');
-            setStatusMessage('');
-          }
-        }
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', function (response){
-        setErrorMessage(response.error.description || 'Payment failed');
-        setStatusMessage('');
-      });
-      rzp.open();
+      setStatusMessage('Payment confirmed. Generating your invoice...');
+      setTimeout(() => {
+        navigate(`/invoice?payment_id=${orderData.payment_id}`);
+      }, 900);
       
     } catch (err) {
       setErrorMessage(`Connection error: ${err.message}`);
@@ -186,10 +122,10 @@ export default function Payment() {
                   className="w-full rounded-full py-5 font-bold uppercase tracking-[0.2em] hover:opacity-90 transition duration-300 flex items-center justify-center gap-3"
                   style={{ backgroundColor: 'var(--accent-cyan)', color: '#000' }}
                 >
-                  Pay with Razorpay <span className="text-xl">💳</span>
+                  Confirm Payment <span className="text-xl">💳</span>
                 </button>
                 <p className="text-center mt-4 text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-subtle)' }}>
-                  Secured by Razorpay Encryption
+                  Simulated Payment Gateway
                 </p>
               </div>
 
