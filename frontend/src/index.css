@@ -1,0 +1,424 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-color: #050505;
+    --text-color: #F5F5F5;
+    --heading-color: #ffffff;
+    --text-muted: #9ca3af;
+    --text-subtle: #6b7280;
+    --accent-cyan: #00F0FF;
+    --accent-purple: #8A2BE2;
+    --glass-bg: rgba(18, 18, 22, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.16);
+    --glass-gradient-top: rgba(255,255,255,0.08);
+    --glass-gradient-bottom: rgba(22,22,28,0.72);
+    --surface-bg: rgba(0,0,0,0.4);
+    --surface-border: rgba(255,255,255,0.1);
+    --surface-border-subtle: rgba(255,255,255,0.05);
+    --input-bg: rgba(0,0,0,0.4);
+    --input-border: rgba(255,255,255,0.1);
+    --input-placeholder: #4b5563;
+    --card-shadow: rgba(0,0,0,0.32);
+    --btn-bg: #ffffff;
+    --btn-text: #000000;
+    --btn-border: rgba(255,255,255,0.06);
+    --btn-hover-bg: rgba(0,240,255,0.08);
+    --btn-shadow: 0 6px 20px rgba(0,240,255,0.08);
+    --footer-bg: #050505;
+    --preloader-bg: #050505;
+    --preloader-text: #F5F5F5;
+    --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+    --slot-bg: rgba(0,0,0,0.5);
+    --overlay-bg: rgba(5, 5, 5, 0.95);
+    --icon-bg: rgba(255,255,255,0.05);
+    --tab-active-bg: #ffffff;
+    --tab-active-text: #000000;
+    --tab-inactive-bg: rgba(0,0,0,0.4);
+    --tab-inactive-border: rgba(255,255,255,0.1);
+    --tab-inactive-text: #d1d5db;
+    --table-hover: rgba(255,255,255,0.05);
+    --badge-bg: rgba(255,255,255,0.1);
+    --gradient-to: #000000;
+}
+
+/* Light theme variables */
+.theme-light {
+    --bg-color: #f6f7fb;
+    --text-color: #0b1220;
+    --heading-color: #0b1220;
+    --text-muted: #4b5563;
+    --text-subtle: #6b7280;
+    --accent-cyan: #0891b2;
+    --accent-purple: #7c3aed;
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-gradient-top: rgba(255,255,255,0.9);
+    --glass-gradient-bottom: rgba(240,242,248,0.85);
+    --surface-bg: rgba(255,255,255,0.7);
+    --surface-border: rgba(0,0,0,0.08);
+    --surface-border-subtle: rgba(0,0,0,0.04);
+    --input-bg: rgba(255,255,255,0.85);
+    --input-border: rgba(0,0,0,0.12);
+    --input-placeholder: #9ca3af;
+    --card-shadow: rgba(0,0,0,0.06);
+    --btn-bg: #0b1220;
+    --btn-text: #ffffff;
+    --btn-border: rgba(0,0,0,0.06);
+    --btn-hover-bg: rgba(0,0,0,0.12);
+    --btn-shadow: 0 6px 20px rgba(11,18,32,0.08);
+    --footer-bg: #ebedf3;
+    --preloader-bg: #f6f7fb;
+    --preloader-text: #0b1220;
+    --scrollbar-thumb: rgba(0, 0, 0, 0.12);
+    --slot-bg: rgba(255,255,255,0.8);
+    --overlay-bg: rgba(246, 247, 251, 0.95);
+    --icon-bg: rgba(0,0,0,0.05);
+    --tab-active-bg: #0b1220;
+    --tab-active-text: #ffffff;
+    --tab-inactive-bg: rgba(255,255,255,0.7);
+    --tab-inactive-border: rgba(0,0,0,0.1);
+    --tab-inactive-text: #374151;
+    --table-hover: rgba(0,0,0,0.03);
+    --badge-bg: rgba(0,0,0,0.05);
+    --gradient-to: #e5e7ef;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+    /* Theme toggle button baseline */
+    .theme-toggle {
+        width: 40px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.06);
+    }
+    .theme-toggle svg {
+        width: 18px;
+        height: 18px;
+        display: block;
+    }
+
+    /* Primary button used across the app (Book Now etc.) */
+    .btn-primary {
+        background: var(--btn-bg);
+        color: var(--btn-text);
+        border: 1px solid var(--btn-border);
+        padding: 0.6rem 1rem;
+        border-radius: 999px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.75rem;
+        box-shadow: none;
+        transition: all 180ms ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-primary:hover,
+    .btn-primary:focus {
+        background: var(--btn-hover-bg);
+        box-shadow: var(--btn-shadow);
+        transform: translateY(-1px);
+    }
+
+    /* Ensure links that look like buttons reset default styles */
+    a.btn-primary { text-decoration: none; }
+
+    /* Make theme toggle visible on all sizes and ensure contrast */
+    .theme-toggle {
+        background: transparent;
+        border: 1px solid var(--btn-border);
+    }
+
+    .watermark {
+        position: fixed;
+        bottom: 0.75rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 60;
+        color: var(--text-subtle);
+        font-size: 0.72rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        pointer-events: none;
+        opacity: 0.75;
+        white-space: nowrap;
+    }
+
+h1, h2, h3, h4, .font-display {
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Custom Cursor styling - only enabled on desktop */
+@media (hover: hover) and (pointer: fine) {
+    body, a, button, select, input, textarea, .slot {
+        cursor: none !important;
+    }
+    
+    .custom-cursor {
+        display: block;
+        width: 32px;
+        height: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 99999;
+        mix-blend-mode: difference;
+        transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s, border-color 0.3s, opacity 0.3s;
+    }
+    
+    .custom-cursor.active {
+        width: 64px;
+        height: 64px;
+        background-color: rgba(255, 255, 255, 1);
+        border-color: rgba(255, 255, 255, 1);
+    }
+    
+    .custom-cursor.view-mode {
+        width: 80px;
+        height: 80px;
+        border-color: var(--accent-cyan);
+        background-color: rgba(0, 240, 255, 0.15);
+    }
+    
+    .custom-cursor.view-mode::after {
+        content: "VIEW";
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--accent-cyan);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        letter-spacing: 0.1em;
+    }
+
+    .custom-cursor.drag-mode {
+        width: 80px;
+        height: 80px;
+        border-color: var(--accent-purple);
+        background-color: rgba(138, 43, 226, 0.15);
+    }
+    
+    .custom-cursor.drag-mode::after {
+        content: "DRAG";
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        color: #E0B0FF;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        letter-spacing: 0.1em;
+    }
+
+    .custom-cursor-dot {
+        display: block;
+        width: 6px;
+        height: 6px;
+        background-color: var(--accent-cyan);
+        border-radius: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 99999;
+        transition: transform 0.1s, opacity 0.3s;
+    }
+}
+
+/* Fallback/Hide cursor elements on mobile */
+@media (hover: none) or (pointer: coarse) {
+    .custom-cursor, .custom-cursor-dot {
+        display: none !important;
+    }
+}
+
+/* Premium Glassmorphism */
+.glass-panel {
+    background: linear-gradient(180deg, var(--glass-gradient-top) 0%, var(--glass-gradient-bottom) 100%), var(--glass-bg);
+    background-blend-mode: overlay;
+    backdrop-filter: blur(32px) saturate(210%);
+    -webkit-backdrop-filter: blur(32px) saturate(210%);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 35px 90px var(--card-shadow);
+    position: relative;
+    overflow: hidden;
+    background-clip: padding-box;
+    transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+.glass-panel::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    opacity: 0.06;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.glass-panel > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-cyan);
+}
+
+/* Ensure native date/time pickers are visible */
+input[type="date"], input[type="time"], input[type="month"], input[type="datetime-local"] {
+    color: var(--text-color);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    -webkit-appearance: textfield;
+    appearance: textfield;
+}
+
+/* WebKit calendar icon visibility — dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.2) contrast(1.1);
+    opacity: 1;
+}
+/* Light theme: reset calendar icon filter */
+.theme-light input[type="date"]::-webkit-calendar-picker-indicator,
+.theme-light input[type="time"]::-webkit-calendar-picker-indicator,
+.theme-light input[type="month"]::-webkit-calendar-picker-indicator,
+.theme-light input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: none;
+    opacity: 0.7;
+}
+
+/* Make sure placeholder text is readable */
+input::placeholder, textarea::placeholder {
+    color: var(--input-placeholder);
+}
+
+/* Slot selected state styling */
+.slot.selected {
+    background: rgba(0, 240, 255, 0.15) !important;
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3) !important;
+    color: var(--heading-color) !important;
+}
+
+/* AI Orb Floating Container */
+#ai-orb-container {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--surface-border);
+}
+#ai-orb-container:hover {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+}
+
+/* Virtual Mirror Camera Stream Styling */
+.mirror-container {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    min-height: 360px;
+}
+.mirror-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+.mirror-overlay-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Mirror controls and mobile adjustments */
+.mirror-controls { display: flex; align-items: center; }
+.mirror-controls .btn-primary { flex: 1; }
+
+@media (max-width: 768px) {
+    .mirror-container { min-height: 56vh; border-radius: 18px; }
+    .btn-primary { padding: 0.9rem 1rem; font-size: 0.95rem; }
+    .mirror-controls { gap: 0.5rem; }
+}
+
+/* Ensure upload label is tappable on mobile */
+label input[type="file"].sr-only { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+/* Voice assistant listening dialog */
+#voice-assistant-overlay {
+    background: var(--overlay-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--surface-border);
+}
+
+/* High-contrast focus state for WebGL fallback buttons */
+.a11y-fallback-btn:focus {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 4px;
+}
+.a11y-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+.text-mask {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+/* Smooth theme transition on key elements */
+.glass-panel,
+nav,
+input,
+select,
+textarea,
+button,
+a {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
