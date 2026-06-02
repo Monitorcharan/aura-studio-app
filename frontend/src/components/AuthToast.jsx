@@ -8,19 +8,24 @@ export default function AuthToast({ message = 'Login required to access this fea
   useEffect(() => {
     if (show) {
       setVisible(true);
-      // Trigger entrance animation
-      requestAnimationFrame(() => setAnimating(true));
+      // Use setTimeout to ensure DOM is painted before triggering CSS transition
+      const enterTimer = setTimeout(() => {
+        setAnimating(true);
+      }, 50);
 
-      // Auto dismiss after 5 seconds
-      const timer = setTimeout(() => {
+      // Auto dismiss after 8 seconds (gives time to read after Preloader)
+      const dismissTimer = setTimeout(() => {
         setAnimating(false);
         setTimeout(() => {
           setVisible(false);
           if (onClose) onClose();
         }, 400);
-      }, 5000);
+      }, 8000);
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(enterTimer);
+        clearTimeout(dismissTimer);
+      };
     }
   }, [show, onClose]);
 
@@ -114,7 +119,7 @@ export default function AuthToast({ message = 'Login required to access this fea
             className="h-full rounded-full"
             style={{
               backgroundColor: 'var(--accent-cyan, #00F0FF)',
-              animation: 'auth-toast-progress 5s linear forwards'
+              animation: 'auth-toast-progress 8s linear forwards'
             }}
           />
         </div>
