@@ -85,16 +85,33 @@ export default function Profile() {
         <section className="glass-panel rounded-3xl p-10 shadow-2xl fade-in-up" style={{ borderColor: 'var(--surface-border)' }}>
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-xl">
-              <p className="text-accentCyan uppercase tracking-[0.3em] text-xs font-mono mb-4">Member Profile</p>
-              <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--heading-color)' }}>Your account settings.</h1>
-              <p className="leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                Manage your profile, review payment history, and keep your contact details up to date.
+              <p className="text-accentCyan uppercase tracking-[0.3em] text-xs font-mono mb-4">Client Dashboard</p>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display" style={{ color: 'var(--heading-color)' }}>
+                Welcome, {profile?.name ? profile.name.split(' ')[0] : 'Guest'}.
+              </h1>
+              <p className="leading-relaxed text-lg" style={{ color: 'var(--text-muted)' }}>
+                Your personal portal. Manage your upcoming bookings, review styling history, and upgrade your access.
               </p>
             </div>
-            <div className="rounded-3xl p-6 max-w-sm" style={{ borderWidth: '1px', borderColor: 'var(--surface-border)', backgroundColor: 'var(--surface-bg)' }}>
-              <p className="uppercase tracking-[0.2em] text-[10px] mb-3" style={{ color: 'var(--text-muted)' }}>Role</p>
-              <p className="font-semibold" style={{ color: 'var(--heading-color)' }}>{profile?.role || 'user'}</p>
-              <p className="mt-4 text-sm" style={{ color: 'var(--text-muted)' }}>Use the member dashboard links to review appointments and payments.</p>
+            <div className="rounded-3xl p-6 max-w-sm flex flex-col justify-center w-full" style={{ borderWidth: '1px', borderColor: 'var(--surface-border)', backgroundColor: 'var(--surface-bg)' }}>
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <p className="uppercase tracking-[0.2em] text-[10px] mb-1" style={{ color: 'var(--text-muted)' }}>Status</p>
+                  <p className="font-semibold" style={{ color: 'var(--heading-color)' }}>
+                    {profile?.membership_tier === 'elite' ? 'Aura Elite VIP' : 'Standard Member'}
+                  </p>
+                </div>
+                {profile?.membership_tier === 'elite' && (
+                  <span className="text-2xl text-yellow-400">👑</span>
+                )}
+              </div>
+              {profile?.membership_tier !== 'elite' ? (
+                <button onClick={() => navigate('/elite')} className="w-full text-xs font-bold uppercase tracking-widest py-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black shadow-[0_0_15px_rgba(250,204,21,0.2)] mt-2 hover:opacity-90 transition">
+                  Upgrade to Elite
+                </button>
+              ) : (
+                <p className="text-xs font-mono text-emerald-400">Active until: {new Date(profile.membership_expires_at).toLocaleDateString()}</p>
+              )}
             </div>
           </div>
 
