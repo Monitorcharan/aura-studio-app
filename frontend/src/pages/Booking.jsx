@@ -354,7 +354,7 @@ export default function Booking() {
                 <p className="text-accentCyan text-xs font-mono uppercase tracking-[0.24em]">Spatial digital twin</p>
                 <button
                   type="button"
-                  onClick={() => navigate('/virtual-mirror')}
+                  onClick={startCamera}
                   className="glass-panel text-xs font-mono uppercase tracking-widest text-accentCyan hover:bg-accentCyan hover:text-black hover:border-accentCyan px-3.5 py-1.5 rounded-full transition duration-300 cursor-none"
                   style={{ borderColor: 'var(--surface-border)' }}
                 >
