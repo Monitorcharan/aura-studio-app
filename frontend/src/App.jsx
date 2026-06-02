@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import WebGLBackground from './components/WebGLBackground';
 import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
+import AIChatWidget from './components/AIChatWidget';
 
 // Page imports
 import Home from './pages/Home';
@@ -53,6 +54,9 @@ function App() {
         </div>
 
         <div className="watermark">Powered by Open AI</div>
+
+        {/* Global AI Chat Widget */}
+        <AIChatWidget />
       </div>
     </Router>
   );
