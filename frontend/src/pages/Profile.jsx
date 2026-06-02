@@ -171,6 +171,95 @@ export default function Profile() {
             </div>
           </div>
         </section>
+
+        {/* Available Services Section (Dashboard View) */}
+        <section className="mt-20">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+            <div>
+              <div className="text-accentCyan font-mono text-xs uppercase tracking-[0.3em] mb-3">
+                Quick Booking
+              </div>
+              <h2 className="text-3xl md:text-5xl font-bold font-display" style={{ color: 'var(--heading-color)' }}>Our Services</h2>
+            </div>
+            <button onClick={() => navigate('/booking')} className="glass-panel text-xs hover:opacity-90 transition duration-300 inline-flex items-center gap-3 w-max px-6 py-3 rounded-full font-bold uppercase tracking-wider" style={{ color: 'var(--heading-color)', borderColor: 'var(--surface-border)' }}>
+              Book Appointment <span className="text-accentCyan font-semibold">→</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Card 1 */}
+            <div onClick={() => navigate('/booking')} className="glass-panel p-8 rounded-3xl hover:border-accentCyan/30 transition duration-500 cursor-pointer flex flex-col justify-between aspect-[3/4]" style={{ borderColor: 'var(--surface-border)' }}>
+              <div>
+                <div className="flex justify-between items-start">
+                  <span className="text-2xl mb-6" style={{ color: 'var(--text-subtle)' }}>✂️</span>
+                  <span className="text-xs font-mono" style={{ color: 'var(--text-subtle)' }}>01</span>
+                </div>
+                <h3 className="text-xl font-bold mb-3 font-display" style={{ color: 'var(--heading-color)' }}>Precision Cut</h3>
+                <p className="text-sm font-light leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                  Bespoke surgical-precision haircut tailored to your head structure.
+                </p>
+              </div>
+              <div className="flex justify-between items-baseline mt-6">
+                <span className="text-sm font-mono" style={{ color: 'var(--text-subtle)' }}>45m</span>
+                <span className="text-2xl font-bold text-accentCyan font-display">$65+</span>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div onClick={() => navigate('/booking')} className="glass-panel p-8 rounded-3xl hover:border-accentCyan/30 transition duration-500 cursor-pointer flex flex-col justify-between aspect-[3/4]" style={{ borderColor: 'var(--surface-border)' }}>
+              <div>
+                <div className="flex justify-between items-start">
+                  <span className="text-2xl mb-6" style={{ color: 'var(--text-subtle)' }}>🎨</span>
+                  <span className="text-xs font-mono" style={{ color: 'var(--text-subtle)' }}>02</span>
+                </div>
+                <h3 className="text-xl font-bold mb-3 font-display" style={{ color: 'var(--heading-color)' }}>Color & Tone</h3>
+                <p className="text-sm font-light leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                  From micro highlights to futuristic metallic chromatic dye.
+                </p>
+              </div>
+              <div className="flex justify-between items-baseline mt-6">
+                <span className="text-sm font-mono" style={{ color: 'var(--text-subtle)' }}>90m</span>
+                <span className="text-2xl font-bold text-accentCyan font-display">$120+</span>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div onClick={() => navigate('/booking')} className="glass-panel p-8 rounded-3xl hover:border-accentCyan/30 transition duration-500 cursor-pointer flex flex-col justify-between aspect-[3/4]" style={{ borderColor: 'var(--surface-border)' }}>
+              <div>
+                <div className="flex justify-between items-start">
+                  <span className="text-2xl mb-6" style={{ color: 'var(--text-subtle)' }}>🌿</span>
+                  <span className="text-xs font-mono" style={{ color: 'var(--text-subtle)' }}>03</span>
+                </div>
+                <h3 className="text-xl font-bold mb-3 font-display" style={{ color: 'var(--heading-color)' }}>Scalp Spa</h3>
+                <p className="text-sm font-light leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                  Hydro-massage, dynamic scalp treatment, and deep conditioning.
+                </p>
+              </div>
+              <div className="flex justify-between items-baseline mt-6">
+                <span className="text-sm font-mono" style={{ color: 'var(--text-subtle)' }}>60m</span>
+                <span className="text-2xl font-bold text-accentCyan font-display">$85+</span>
+              </div>
+            </div>
+
+            {/* Card 4 */}
+            <div onClick={() => navigate('/booking')} className="glass-panel p-8 rounded-3xl hover:border-accentCyan/30 transition duration-500 cursor-pointer flex flex-col justify-between aspect-[3/4]" style={{ borderColor: 'var(--surface-border)' }}>
+              <div>
+                <div className="flex justify-between items-start">
+                  <span className="text-2xl mb-6" style={{ color: 'var(--text-subtle)' }}>✨</span>
+                  <span className="text-xs font-mono" style={{ color: 'var(--text-subtle)' }}>04</span>
+                </div>
+                <h3 className="text-xl font-bold mb-3 font-display" style={{ color: 'var(--heading-color)' }}>Event Styling</h3>
+                <p className="text-sm font-light leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                  Red carpet ready, high fashion shoot blowouts, or master styling sessions.
+                </p>
+              </div>
+              <div className="flex justify-between items-baseline mt-6">
+                <span className="text-sm font-mono" style={{ color: 'var(--text-subtle)' }}>60m</span>
+                <span className="text-2xl font-bold text-accentCyan font-display">$95+</span>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </>
   );
