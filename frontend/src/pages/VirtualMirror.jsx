@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
+import { useNavigate } from 'react-router-dom';
 
 const OPTIONS = {
   faceShape: [
@@ -39,6 +40,7 @@ const getFaceShapeFromBox = (box) => {
 };
 
 export default function VirtualMirror() {
+  const navigate = useNavigate();
   const webcamRef = useRef(null);
   const [form, setForm] = useState({
     faceShape: 'round',
@@ -54,6 +56,14 @@ export default function VirtualMirror() {
   const [detectedInfo, setDetectedInfo] = useState(null);
   const [error, setError] = useState('');
   const [facingMode, setFacingMode] = useState('user');
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      setError('Authentication required. Redirecting to login...');
+      setTimeout(() => navigate('/login'), 1500);
+    }
+  }, [navigate]);
 
   const handleChange = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
