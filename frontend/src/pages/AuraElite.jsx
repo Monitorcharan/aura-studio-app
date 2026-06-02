@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import Preloader from '../components/Preloader';
-import AuthToast from '../components/AuthToast';
 
 export default function AuraElite() {
   const navigate = useNavigate();
@@ -10,12 +9,11 @@ export default function AuraElite() {
   const [statusMessage, setStatusMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isElite, setIsElite] = useState(false);
-  const [showAuthToast, setShowAuthToast] = useState(false);
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setShowAuthToast(true);
+      navigate('/login');
       return;
     }
     setToken(authToken);
@@ -68,8 +66,7 @@ export default function AuraElite() {
 
   return (
     <>
-      <AuthToast show={showAuthToast} message="Login required to upgrade to Elite." onClose={() => setShowAuthToast(false)} />
-      <Preloader title="AURA / ELITE" subtitle="VIP TERMINAL" />
+      <Preloader title="AURA / ELITE" subtitle="VIP MEMBERSHIP" />
 
       <main className="min-h-screen px-8 md:px-24 py-24 max-w-6xl mx-auto relative z-10" style={{ color: 'var(--text-color)' }}>
         <section className="glass-panel rounded-3xl p-10 shadow-2xl fade-in-up border" style={{ borderColor: 'var(--surface-border)' }}>

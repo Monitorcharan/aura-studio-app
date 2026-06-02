@@ -4,7 +4,6 @@ import gsap from 'gsap';
 import Preloader from '../components/Preloader';
 import DigitalTwin from '../components/DigitalTwin';
 import AIConciergeOrb from '../components/AIConciergeOrb';
-import AuthToast from '../components/AuthToast';
 
 const stylists = [
   { id: 'marcus', name: 'Marcus Vance', title: 'Master Barber / Creative Director', rating: '4.9', bio: 'Specializes in surgical precision fades, hair tattooing, and futuristic geometry cuts.', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250' },
@@ -19,7 +18,6 @@ export default function Booking() {
   const [token, setToken] = useState('');
   const [userId, setUserId] = useState('');
   const [membershipTier, setMembershipTier] = useState('standard');
-  const [showAuthToast, setShowAuthToast] = useState(false);
   
   // Form State
   const [services, setServices] = useState([]);
@@ -57,7 +55,10 @@ export default function Booking() {
     const activeUserId = localStorage.getItem('userId');
     const activeTier = localStorage.getItem('membership_tier') || 'standard';
     if (!activeToken) {
-      setShowAuthToast(true);
+      setErrorMessage('Unauthenticated. Redirecting to login portal...');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
       return;
     }
     setToken(activeToken);
@@ -381,7 +382,6 @@ export default function Booking() {
 
   return (
     <>
-      <AuthToast show={showAuthToast} message="Login required to book an appointment." onClose={() => setShowAuthToast(false)} />
       <Preloader title="AURA / APPOINTMENT" subtitle="RESERVATION HUB" />
       
       {/* Voice Assistant Orb */}

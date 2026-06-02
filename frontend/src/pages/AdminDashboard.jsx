@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import Preloader from '../components/Preloader';
-import AuthToast from '../components/AuthToast';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [token, setToken] = useState('');
-  const [showAuthToast, setShowAuthToast] = useState(false);
   
   // Dashboard Tabs
   const [activeTab, setActiveTab] = useState('services');
@@ -34,7 +32,10 @@ export default function AdminDashboard() {
     const activeToken = localStorage.getItem('authToken');
     const activeRole = localStorage.getItem('userRole');
     if (!activeToken || activeRole !== 'admin') {
-      setShowAuthToast(true);
+      setErrorMessage('Admin access required. Redirecting...');
+      setTimeout(() => {
+        navigate('/admin-login');
+      }, 1500);
       return;
     }
     setToken(activeToken);
@@ -252,7 +253,6 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <AuthToast show={showAuthToast} message="Admin clearance required to access the command portal." onClose={() => setShowAuthToast(false)} />
       <Preloader title="AURA / ADMIN" subtitle="COMMAND PORTAL" />
 
       <main className="min-h-screen px-4 sm:px-8 md:px-24 py-24 sm:py-28 max-w-7xl mx-auto w-full relative">
