@@ -171,7 +171,19 @@ export default function VirtualMirror() {
   };
 
   return (
-    <main className="relative py-24 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto">
+    <>
+      <style>{`
+        @keyframes scan-laser {
+          0% { top: 0%; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { top: 100%; opacity: 0; }
+        }
+        .animate-scan-laser {
+          animation: scan-laser 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+      `}</style>
+      <main className="relative py-24 px-6 md:px-16 lg:px-24 max-w-7xl mx-auto">
       <section className="glass-panel p-8 rounded-3xl border" style={{ borderColor: 'var(--surface-border)' }}>
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-1/2 space-y-8">
@@ -188,14 +200,39 @@ export default function VirtualMirror() {
             </div>
 
             <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="rounded-3xl overflow-hidden border border-[var(--surface-border)] bg-[var(--surface-bg)] mirror-container">
+              <div className="relative rounded-3xl overflow-hidden border border-[var(--surface-border)] bg-[var(--surface-bg)] mirror-container">
                 <Webcam
                   audio={false}
                   ref={webcamRef}
                   screenshotFormat="image/jpeg"
-                  className="mirror-video"
+                  className="mirror-video w-full h-full object-cover"
                   videoConstraints={{ facingMode }}
                 />
+                
+                {/* AI AR Scanning Overlay */}
+                {detecting && (
+                  <div className="absolute inset-0 z-10 pointer-events-none">
+                    <div className="w-full h-full relative bg-accentCyan/10 backdrop-contrast-125">
+                      {/* Sweeping Laser Line */}
+                      <div className="absolute left-0 right-0 h-[2px] bg-accentCyan shadow-[0_0_20px_4px_rgba(0,240,255,0.7)] animate-scan-laser"></div>
+                      
+                      {/* Facial Recognition Brackets */}
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-64 border border-accentCyan/30 border-dashed rounded-3xl">
+                        <div className="absolute -top-1 -left-1 w-8 h-8 border-t-2 border-l-2 border-accentCyan"></div>
+                        <div className="absolute -top-1 -right-1 w-8 h-8 border-t-2 border-r-2 border-accentCyan"></div>
+                        <div className="absolute -bottom-1 -left-1 w-8 h-8 border-b-2 border-l-2 border-accentCyan"></div>
+                        <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-2 border-r-2 border-accentCyan"></div>
+                      </div>
+                      
+                      {/* HUD Data Matrix */}
+                      <div className="absolute bottom-6 left-6 text-accentCyan font-mono text-[10px] space-y-2 opacity-80">
+                        <p className="tracking-widest">ANALYZING FACIAL TOPOGRAPHY...</p>
+                        <p className="tracking-widest">MEASURING BONE STRUCTURE [||||||||  ]</p>
+                        <p className="tracking-widest">CALCULATING HAIRLINE TRAJECTORY</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="space-y-4">
                 <div className="mirror-controls flex gap-3">
@@ -290,5 +327,6 @@ export default function VirtualMirror() {
         </div>
       </section>
     </main>
+    </>
   );
 }
