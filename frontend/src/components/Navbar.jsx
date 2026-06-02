@@ -8,7 +8,10 @@ export default function Navbar() {
   const [userName, setUserName] = useState('');
   const [userRole, setUserRole] = useState('user');
   const [membershipTier, setMembershipTier] = useState('standard');
-  const [isLightTheme, setIsLightTheme] = useState(false);
+  const [isLightTheme, setIsLightTheme] = useState(() => {
+    const t = localStorage.getItem('theme') || 'dark';
+    return t === 'light';
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
@@ -29,12 +32,17 @@ export default function Navbar() {
       setUserName(name || '');
       setUserRole(role);
       setMembershipTier(tier);
+
+      // Sync theme state and document classes
+      const t = localStorage.getItem('theme') || 'dark';
+      setIsLightTheme(t === 'light');
+      if (t === 'light') {
+        document.documentElement.classList.add('theme-light');
+      } else {
+        document.documentElement.classList.remove('theme-light');
+      }
     };
     checkAuth();
-
-    // Init theme state
-    const t = localStorage.getItem('theme') || 'dark';
-    setIsLightTheme(t === 'light');
 
     // Set up a listener for storage shifts
     window.addEventListener('storage', checkAuth);
