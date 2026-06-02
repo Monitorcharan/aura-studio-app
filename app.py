@@ -50,6 +50,25 @@ def ensure_admin_exists():
         result = users.insert_one(user)
         print(f"Created admin user 'admin' with id={result.inserted_id}")
 
+def ensure_stylists_exist():
+    users = db['users']
+    stylists = ['marcus', 'elena', 'sophia']
+    hashed = bcrypt.hashpw('stylist@123'.encode('utf-8'), bcrypt.gensalt())
+    
+    for stylist_username in stylists:
+        existing = users.find_one({'username': stylist_username})
+        if not existing:
+            user = {
+                'name': stylist_username.capitalize(),
+                'email': f"{stylist_username}@aurastudio.com",
+                'username': stylist_username,
+                'password': hashed,
+                'phone': '',
+                'role': 'stylist'
+            }
+            users.insert_one(user)
+            print(f"Created stylist user '{stylist_username}'")
+
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'frontend', 'dist')
 
 @app.route('/', defaults={'path': ''})
@@ -64,8 +83,9 @@ def catch_all(path):
 # create admin user before starting the server or when imported by gunicorn
 try:
     ensure_admin_exists()
+    ensure_stylists_exist()
 except Exception as e:
-    print('Warning: ensure_admin_exists failed:', e)
+    print('Warning: ensure_admin/stylist failed:', e)
 
 if __name__ == '__main__':
     app.run(debug=os.getenv('FLASK_DEBUG', 'False').lower() == 'true')

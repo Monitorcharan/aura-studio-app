@@ -6,9 +6,10 @@ from controllers.appointmentController import (
     update_appointment,
     cancel_appointment,
     get_available_slots,
-    get_all_appointments
+    get_all_appointments,
+    get_stylist_appointments
 )
-from middlewares.authMiddleware import token_required, admin_required
+from middlewares.authMiddleware import token_required, admin_required, stylist_required
 
 appointment_bp = Blueprint('appointment', __name__)
 
@@ -45,3 +46,8 @@ def available_slots():
 @admin_required
 def get_all_appts():
     return get_all_appointments()
+
+@appointment_bp.route('/appointments/stylist', methods=['GET'])
+@stylist_required
+def get_stylist_appts():
+    return get_stylist_appointments()

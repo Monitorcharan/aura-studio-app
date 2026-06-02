@@ -168,6 +168,7 @@ export default function Booking() {
       service_id: selectedService,
       appointment_date: date,
       appointment_time: selectedSlot,
+      stylist_id: selectedStylistId,
       notes: finalNotes
     };
 

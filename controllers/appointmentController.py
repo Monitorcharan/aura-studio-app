@@ -17,6 +17,7 @@ def book_appointment():
     service_id = data.get("service_id")
     appointment_date = data.get("appointment_date")
     appointment_time = data.get("appointment_time")
+    stylist_id = data.get("stylist_id", "")
     notes = data.get("notes", "")
 
     if not user_id or not service_id or not appointment_date or not appointment_time:
@@ -50,6 +51,7 @@ def book_appointment():
         "service_id": ObjectId(service_id),
         "appointment_date": appointment_date,
         "appointment_time": appointment_time,
+        "stylist_id": stylist_id,
         "notes": notes,
         "status": "pending",
         "appointment_token": appointment_token,
@@ -129,7 +131,7 @@ def update_appointment(appointment_id):
 
         user_id = getattr(request, 'user_id', None)
         user_role = getattr(request, 'user_role', 'user')
-        if str(appointment["user_id"]) != str(user_id) and user_role != "admin":
+        if str(appointment["user_id"]) != str(user_id) and user_role not in ["admin", "stylist"]:
             return jsonify({"message": "Unauthorized access to modify this appointment"}), 403
 
         update_data = {
@@ -170,7 +172,7 @@ def cancel_appointment(appointment_id):
 
         user_id = getattr(request, 'user_id', None)
         user_role = getattr(request, 'user_role', 'user')
-        if str(appointment["user_id"]) != str(user_id) and user_role != "admin":
+        if str(appointment["user_id"]) != str(user_id) and user_role not in ["admin", "stylist"]:
             return jsonify({"message": "Unauthorized access to cancel this appointment"}), 403
 
         appointments.update_one(
@@ -245,3 +247,41 @@ def get_all_appointments():
         return jsonify({"appointments": appts}), 200
     except:
         return jsonify({"message": "Error loading appointments"}), 400
+
+
+def get_stylist_appointments():
+    """Get all appointments assigned to a specific stylist"""
+    user_id = getattr(request, 'user_id', None)
+    
+    if not user_id:
+        return jsonify({"message": "User ID is required"}), 400
+        
+    try:
+        # Fetch the stylist user to get their username
+        stylist = users.find_one({"_id": ObjectId(user_id)})
+        if not stylist:
+            return jsonify({"message": "Stylist not found"}), 404
+            
+        stylist_username = stylist.get("username", "")
+        
+        # Query appointments for this stylist
+        appts = list(appointments.find({"stylist_id": stylist_username}))
+        
+        # Enrich data
+        for appt in appts:
+            appt["_id"] = str(appt["_id"])
+            appt["user_id"] = str(appt["user_id"])
+            appt["service_id"] = str(appt["service_id"])
+            
+            user = users.find_one({"_id": ObjectId(appt["user_id"])})
+            if user:
+                appt["user_name"] = user.get("name", "Unknown")
+                appt["user_email"] = user.get("email", "")
+            
+            service = services.find_one({"_id": ObjectId(appt["service_id"])})
+            if service:
+                appt["service_name"] = service.get("name", "Unknown")
+        
+        return jsonify({"appointments": appts}), 200
+    except Exception as e:
+        return jsonify({"message": f"Error loading stylist queue: {str(e)}"}), 400

@@ -101,6 +101,10 @@ export default function Navbar() {
               <Link to="/admin-dashboard" className="transition cursor-none magnetic hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
                 Admin Dashboard
               </Link>
+            ) : userRole === 'stylist' ? (
+              <Link to="/stylist-dashboard" className="transition cursor-none magnetic hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
+                Stylist Dashboard
+              </Link>
             ) : (
               <>
                 <Link to="/profile" className="transition cursor-none magnetic hover:opacity-80" style={{ color: 'var(--text-muted)' }}>

@@ -46,7 +46,13 @@ export default function AdminLogin() {
         window.dispatchEvent(new Event('auth-change'));
         setSuccessMessage('Welcome, administrator. Routing to control panel...');
         setTimeout(() => {
+          if (data.role === 'admin') {
           navigate('/admin-dashboard');
+        } else if (data.role === 'stylist') {
+          navigate('/stylist-dashboard');
+        } else {
+          navigate('/');
+        }
         }, 1200);
       })
       .catch((error) => {

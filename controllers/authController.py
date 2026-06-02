@@ -123,20 +123,21 @@ def admin_login():
             "message": "Invalid admin credentials"
         }), 401
 
-    if user.get("role") != "admin":
+    if user.get("role") not in ["admin", "stylist"]:
         return jsonify({
-            "message": "Admin access denied"
+            "message": "Staff access denied"
         }), 403
 
-    token = generate_token(user["_id"], role="admin")
+    role = user.get("role")
+    token = generate_token(user["_id"], role=role)
 
     return jsonify({
-        "message": "Admin login successful",
+        "message": f"{role.capitalize()} login successful",
         "token": token,
         "user_id": str(user["_id"]),
         "name": user["name"],
         "email": user["email"],
-        "role": "admin"
+        "role": role
     }), 200
 
 
