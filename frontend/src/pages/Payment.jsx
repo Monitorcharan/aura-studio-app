@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import Preloader from '../components/Preloader';
+import AuthToast from '../components/AuthToast';
 
 export default function Payment() {
   const navigate = useNavigate();
@@ -15,12 +16,12 @@ export default function Payment() {
   const [amount, setAmount] = useState('0');
   const [statusMessage, setStatusMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showAuthToast, setShowAuthToast] = useState(false);
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setErrorMessage('Authentication required. Redirecting to login...');
-      setTimeout(() => navigate('/login'), 1500);
+      setShowAuthToast(true);
       return;
     }
     setToken(authToken);
@@ -88,6 +89,7 @@ export default function Payment() {
 
   return (
     <>
+      <AuthToast show={showAuthToast} message="Login required to complete checkout." onClose={() => setShowAuthToast(false)} />
       <Preloader title="AURA / PAYMENT" subtitle="SECURE TRANSACTION" />
 
       <main className="min-h-screen px-4 sm:px-8 md:px-24 py-24 max-w-6xl mx-auto relative z-10" style={{ color: 'var(--text-color)' }}>

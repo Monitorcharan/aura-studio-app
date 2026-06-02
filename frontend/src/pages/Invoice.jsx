@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import QRCode from 'qrcode';
 import gsap from 'gsap';
 import Preloader from '../components/Preloader';
+import AuthToast from '../components/AuthToast';
 
 export default function Invoice() {
   const navigate = useNavigate();
@@ -12,12 +13,12 @@ export default function Invoice() {
   const [invoice, setInvoice] = useState(null);
   const [qrUrl, setQrUrl] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showAuthToast, setShowAuthToast] = useState(false);
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setErrorMessage('Authentication required. Redirecting to login...');
-      setTimeout(() => navigate('/login'), 1500);
+      setShowAuthToast(true);
       return;
     }
     setToken(authToken);
@@ -69,7 +70,8 @@ export default function Invoice() {
 
   return (
     <>
-      <Preloader title="AURA / INVOICE" subtitle="ALL SYSTEMS GREEN" />
+      <AuthToast show={showAuthToast} message="Login required to view invoices." onClose={() => setShowAuthToast(false)} />
+      <Preloader title="AURA / INVOICE" subtitle="TRANSACTION RECORD" />
 
       <main className="min-h-screen px-8 md:px-24 py-24 max-w-6xl mx-auto relative z-10" style={{ color: 'var(--text-color)' }}>
         <section className="glass-panel rounded-3xl p-10 shadow-2xl fade-in-up" style={{ borderColor: 'var(--surface-border)' }}>

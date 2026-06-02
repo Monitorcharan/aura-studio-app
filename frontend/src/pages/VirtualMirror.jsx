@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import { useNavigate } from 'react-router-dom';
+import AuthToast from '../components/AuthToast';
 
 const OPTIONS = {
   faceShape: [
@@ -56,12 +57,12 @@ export default function VirtualMirror() {
   const [detectedInfo, setDetectedInfo] = useState(null);
   const [error, setError] = useState('');
   const [facingMode, setFacingMode] = useState('user');
+  const [showAuthToast, setShowAuthToast] = useState(false);
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setError('Authentication required. Redirecting to login...');
-      setTimeout(() => navigate('/login'), 1500);
+      setShowAuthToast(true);
     }
   }, [navigate]);
 
@@ -172,6 +173,7 @@ export default function VirtualMirror() {
 
   return (
     <>
+      <AuthToast show={showAuthToast} message="Sign in to use the Virtual Mirror and get AI-powered style recommendations." onClose={() => setShowAuthToast(false)} />
       <style>{`
         @keyframes scan-laser {
           0% { top: 0%; opacity: 0; }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import Preloader from '../components/Preloader';
+import AuthToast from '../components/AuthToast';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -11,12 +12,12 @@ export default function Profile() {
   const [phone, setPhone] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showAuthToast, setShowAuthToast] = useState(false);
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      setErrorMessage('Login required. Redirecting...');
-      setTimeout(() => navigate('/login'), 1500);
+      setShowAuthToast(true);
       return;
     }
     setToken(authToken);
@@ -80,6 +81,7 @@ export default function Profile() {
 
   return (
     <>
+      <AuthToast show={showAuthToast} message="Login required to view your profile dashboard." onClose={() => setShowAuthToast(false)} />
       <Preloader title="AURA / PROFILE" subtitle="PERSONAL DASHBOARD" />
       <main className="min-h-screen px-4 sm:px-8 md:px-24 py-24 max-w-6xl mx-auto relative z-10" style={{ color: 'var(--text-color)' }}>
         <section className="glass-panel rounded-2xl sm:rounded-3xl p-5 sm:p-10 shadow-2xl fade-in-up" style={{ borderColor: 'var(--surface-border)' }}>
