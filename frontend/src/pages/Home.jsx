@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import Preloader from '../components/Preloader';
 
 export default function Home() {
+  const [userName] = useState(() => {
+    const name = localStorage.getItem('userName');
+    return name ? name.split(' ')[0] : '';
+  });
   useEffect(() => {
     // 1. Text reveals and fade-ins after preloader is done
     const onPreloaderComplete = () => {
@@ -159,7 +163,7 @@ export default function Home() {
             Premium Grooming Experience
           </div>
           <h1 className="text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8 reveal-text" style={{ color: 'var(--heading-color)' }}>
-            Elevate Your Aesthetic.
+            {userName ? `Welcome back, ${userName}.` : 'Elevate Your Aesthetic.'}
           </h1>
           <p className="text-base md:text-lg mb-10 max-w-md font-light leading-relaxed fade-in-up" style={{ color: 'var(--text-muted)' }}>
             Precision styling meets cinematic 3D presence. Walk in to define your future identity in a space designed for absolute details.

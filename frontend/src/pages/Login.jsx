@@ -85,7 +85,7 @@ export default function Login() {
         setSuccessMessage('Signature recognized. Initializing session...');
         
         setTimeout(() => {
-          navigate('/profile');
+          navigate('/');
         }, 1500);
       } else {
         setErrorMessage(data.message || 'Signature rejected. Verify credentials.');
