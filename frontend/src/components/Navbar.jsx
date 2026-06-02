@@ -9,6 +9,8 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState('user');
   const [membershipTier, setMembershipTier] = useState('standard');
   const [isLightTheme, setIsLightTheme] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   useEffect(() => {
     const checkAuth = () => {
@@ -157,10 +159,57 @@ export default function Navbar() {
           )}
         </button>
 
-        <Link to="/booking" className="btn-primary">
+        <Link to="/booking" className="btn-primary hidden md:inline-flex">
           Book Now
         </Link>
+        <Link to="/booking" className="btn-primary md:hidden px-4 text-[10px]">
+          Book
+        </Link>
+        
+        <button className="md:hidden p-2 flex items-center justify-center transition-colors" style={{ color: 'var(--heading-color)' }} onClick={toggleMobileMenu}>
+          {mobileMenuOpen ? (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+          )}
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="absolute top-full left-0 right-0 mt-4 mx-6 glass-panel rounded-2xl flex flex-col p-6 gap-6 text-sm font-semibold uppercase tracking-widest md:hidden shadow-2xl transition-all" style={{ borderColor: 'var(--surface-border)' }}>
+          <button onClick={() => { scrollToSection('philosophy'); setMobileMenuOpen(false); }} className="text-left" style={{ color: 'var(--heading-color)' }}>Philosophy</button>
+          <button onClick={() => { scrollToSection('services'); setMobileMenuOpen(false); }} className="text-left" style={{ color: 'var(--heading-color)' }}>Services</button>
+          <Link to="/lookbook" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Lookbook</Link>
+          <Link to="/virtual-mirror" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Virtual Mirror</Link>
+          <div className="h-px w-full" style={{ backgroundColor: 'var(--surface-border)' }}></div>
+          {isLoggedIn ? (
+            <>
+              <div className="text-accentCyan lowercase font-mono normal-case tracking-normal">hello, {userName}</div>
+              {userRole === 'admin' ? (
+                <Link to="/admin-dashboard" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Admin Dashboard</Link>
+              ) : userRole === 'stylist' ? (
+                <Link to="/stylist-dashboard" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Stylist Dashboard</Link>
+              ) : (
+                <>
+                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Profile</Link>
+                  <Link to="/payment-history" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Payments</Link>
+                  {membershipTier !== 'elite' && (
+                    <Link to="/elite" onClick={() => setMobileMenuOpen(false)} className="text-yellow-500 hover:text-yellow-400">Join Elite</Link>
+                  )}
+                </>
+              )}
+              <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-rose-400 text-left">Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Member Login</Link>
+              <Link to="/admin-login" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Admin Portal</Link>
+              <Link to="/register" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--heading-color)' }}>Register</Link>
+            </>
+          )}
+        </div>
+      )}
     </nav>
   );
 }
