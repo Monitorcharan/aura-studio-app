@@ -42,7 +42,7 @@ export default function AdminDashboard() {
 
     // Initial loads
     loadServices();
-    loadAppointments();
+    loadAppointments(activeToken);
     loadAdminMetrics(activeToken);
 
     // Reveal animations
@@ -97,8 +97,13 @@ export default function AdminDashboard() {
       .catch((err) => setErrorMessage('Error downloading catalog: ' + err.message));
   };
 
-  const loadAppointments = () => {
-    fetch('/api/appointments-all')
+  const loadAppointments = (authToken = token) => {
+    const bearer = authToken || localStorage.getItem('authToken');
+    fetch('/api/appointments-all', {
+      headers: {
+        Authorization: `Bearer ${bearer}`
+      }
+    })
       .then((res) => res.json())
       .then((data) => {
         setAppointments(data.appointments || []);
