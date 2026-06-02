@@ -17,6 +17,7 @@ export default function Booking() {
   // Auth Check & Setup
   const [token, setToken] = useState('');
   const [userId, setUserId] = useState('');
+  const [membershipTier, setMembershipTier] = useState('standard');
   
   // Form State
   const [services, setServices] = useState([]);
@@ -52,6 +53,7 @@ export default function Booking() {
   useEffect(() => {
     const activeToken = localStorage.getItem('authToken');
     const activeUserId = localStorage.getItem('userId');
+    const activeTier = localStorage.getItem('membership_tier') || 'standard';
     if (!activeToken) {
       setErrorMessage('Unauthenticated. Redirecting to login portal...');
       setTimeout(() => {
@@ -61,6 +63,7 @@ export default function Booking() {
     }
     setToken(activeToken);
     setUserId(activeUserId);
+    setMembershipTier(activeTier);
 
     // Fetch services
     fetch('/api/services')
@@ -186,7 +189,10 @@ export default function Booking() {
           setSuccessMessage('Appointment locked. Routing details...');
           const service = services.find(s => s._id === selectedService);
           const serviceName = service?.name || '';
-          const amount = service?.price || 0;
+          let amount = service?.price || 0;
+          if (membershipTier === 'elite') {
+            amount = amount * 0.8;
+          }
           const token = data.appointment_token || '';
           
           setTimeout(() => {
@@ -476,11 +482,13 @@ export default function Booking() {
                   style={inputStyle}
                 >
                   <option value="">Choose a signature treatment</option>
-                  {services.map((srv) => (
+                  {services.map((srv) => {
+                    const price = membershipTier === 'elite' ? srv.price * 0.8 : srv.price;
+                    return (
                     <option key={srv._id} value={srv._id}>
-                      {srv.name} - ${srv.price} ({srv.duration_minutes} min)
+                      {srv.name} - ${price.toFixed(2)} ({srv.duration_minutes} min) {membershipTier === 'elite' ? '[-20% Elite]' : ''}
                     </option>
-                  ))}
+                  )})}
                 </select>
               </div>
 

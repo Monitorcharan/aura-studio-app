@@ -8,6 +8,7 @@ from routes.paymentRoutes import payment_bp
 from routes.adminRoutes import admin_bp
 from routes.virtualMirrorRoutes import virtual_mirror_bp
 from routes.chatRoutes import chat_bp
+from routes.membershipRoutes import membership_bp
 import bcrypt
 
 app = Flask(__name__)
@@ -19,6 +20,7 @@ app.register_blueprint(payment_bp, url_prefix='/api')
 app.register_blueprint(admin_bp, url_prefix='/api')
 app.register_blueprint(virtual_mirror_bp, url_prefix='/api')
 app.register_blueprint(chat_bp, url_prefix='/api')
+app.register_blueprint(membership_bp, url_prefix='/api')
 
 
 # Ensure a single admin user exists at startup

@@ -7,6 +7,7 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
   const [userRole, setUserRole] = useState('user');
+  const [membershipTier, setMembershipTier] = useState('standard');
   const [isLightTheme, setIsLightTheme] = useState(false);
 
   useEffect(() => {
@@ -14,9 +15,11 @@ export default function Navbar() {
       const token = localStorage.getItem('authToken');
       const name = localStorage.getItem('userName');
       const role = localStorage.getItem('userRole') || 'user';
+      const tier = localStorage.getItem('membership_tier') || 'standard';
       setIsLoggedIn(!!token);
       setUserName(name || '');
       setUserRole(role);
+      setMembershipTier(tier);
     };
     checkAuth();
 
@@ -40,6 +43,7 @@ export default function Navbar() {
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('membership_tier');
     window.dispatchEvent(new Event('auth-change'));
     navigate('/login');
   };
@@ -96,7 +100,12 @@ export default function Navbar() {
         
         {isLoggedIn ? (
           <>
-            <span className="text-accentCyan font-mono lowercase normal-case tracking-normal">hello, {userName}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-accentCyan font-mono lowercase normal-case tracking-normal">hello, {userName}</span>
+              {membershipTier === 'elite' && (
+                <span className="bg-yellow-400/20 text-yellow-400 text-[9px] uppercase px-2 py-0.5 rounded-full tracking-widest border border-yellow-400/50">Elite</span>
+              )}
+            </div>
             {userRole === 'admin' ? (
               <Link to="/admin-dashboard" className="transition cursor-none magnetic hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
                 Admin Dashboard
@@ -113,6 +122,11 @@ export default function Navbar() {
                 <Link to="/payment-history" className="transition cursor-none magnetic hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
                   Payments
                 </Link>
+                {membershipTier !== 'elite' && (
+                  <Link to="/elite" className="transition cursor-none magnetic hover:opacity-80 text-yellow-500 hover:text-yellow-400">
+                    Join Elite
+                  </Link>
+                )}
               </>
             )}
             <button onClick={handleLogout} className="hover:text-rose-400 transition cursor-none magnetic">

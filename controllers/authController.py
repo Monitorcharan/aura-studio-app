@@ -39,14 +39,16 @@ def register():
         "email": email,
         "password": hashed_password,
         "phone": phone,
-        "role": "user"
+        "role": "user",
+        "membership_tier": "standard"
     }
 
     result = users.insert_one(user)
 
     return jsonify({
         "message": "User registered successfully",
-        "user_id": str(result.inserted_id)
+        "user_id": str(result.inserted_id),
+        "membership_tier": "standard"
     }), 201
 
 
@@ -88,7 +90,8 @@ def login():
         "user_id": str(user["_id"]),
         "name": user["name"],
         "email": user["email"],
-        "role": "user"
+        "role": "user",
+        "membership_tier": user.get("membership_tier", "standard")
     }), 200
 
 
@@ -163,7 +166,9 @@ def profile():
         "name": user["name"],
         "email": user["email"],
         "phone": user.get("phone", ""),
-        "role": user.get("role", "user")
+        "role": user.get("role", "user"),
+        "membership_tier": user.get("membership_tier", "standard"),
+        "membership_expires_at": user.get("membership_expires_at")
     }), 200
 
 
@@ -198,5 +203,6 @@ def update_profile():
         "name": user["name"],
         "email": user["email"],
         "phone": user.get("phone", ""),
-        "role": user.get("role", "user")
+        "role": user.get("role", "user"),
+        "membership_tier": user.get("membership_tier", "standard")
     }), 200

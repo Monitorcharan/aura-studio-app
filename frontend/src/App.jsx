@@ -20,6 +20,7 @@ import PaymentHistory from './pages/PaymentHistory';
 import VirtualMirror from './pages/VirtualMirror';
 import Lookbook from './pages/Lookbook';
 import StylistDashboard from './pages/StylistDashboard';
+import AuraElite from './pages/AuraElite';
 
 import './App.css';
 
@@ -54,6 +55,7 @@ function App() {
             <Route path="/lookbook" element={<Lookbook />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/stylist-dashboard" element={<StylistDashboard />} />
+            <Route path="/elite" element={<AuraElite />} />
           </Routes>
         </div>
 

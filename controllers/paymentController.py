@@ -43,6 +43,10 @@ def create_razorpay_order():
     except (ValueError, TypeError):
         amount = 0.0
 
+    user = users.find_one({"_id": ObjectId(appointment["user_id"])})
+    if user and user.get("membership_tier") == "elite":
+        amount = amount * 0.80
+
     # Initialize Razorpay Client
     key_id = os.getenv("RAZORPAY_KEY_ID")
     key_secret = os.getenv("RAZORPAY_KEY_SECRET")
