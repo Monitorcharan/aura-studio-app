@@ -71,6 +71,21 @@ def ensure_stylists_exist():
             users.insert_one(user)
             print(f"Created stylist user '{stylist_username}'")
 
+from flask import jsonify
+import openai
+
+@app.route('/api/debug-env')
+def debug_env():
+    return jsonify({
+        "has_openai_key": bool(os.getenv("OPENAI_API_KEY")),
+        "openai_key_length": len(os.getenv("OPENAI_API_KEY") or ""),
+        "openai_api_key_set_in_lib": bool(openai.api_key),
+        "openai_base": os.getenv("OPENAI_API_BASE"),
+        "openai_base_set_in_lib": openai.api_base,
+        "chat_model": os.getenv("AI_CHAT_MODEL"),
+        "vision_model": os.getenv("AI_VISION_MODEL")
+    })
+
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'frontend', 'dist')
 
 @app.route('/', defaults={'path': ''})
