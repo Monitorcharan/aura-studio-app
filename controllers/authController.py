@@ -38,6 +38,7 @@ def register():
     )
 
     otp = str(secrets.randbelow(900000) + 100000)
+    print(f"[OTP LOG] Generated OTP Code for {email} is: {otp}")
     otp_expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
 
     user = {
@@ -285,6 +286,7 @@ def resend_otp():
         return jsonify({"message": "User is already verified"}), 200
 
     otp = str(secrets.randbelow(900000) + 100000)
+    print(f"[OTP LOG] Regenerated OTP Code for {email} is: {otp}")
     otp_expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
 
     users.update_one(
