@@ -90,4 +90,7 @@ def ask_ai():
         return jsonify({"reply": reply}), 200
     except Exception as e:
         print("AI Chat API Error:", e)
-        return jsonify({"reply": get_simulated_response(last_message_text)}), 200
+        return jsonify({
+            "reply": get_simulated_response(last_message_text),
+            "error_details": str(e)
+        }), 200
