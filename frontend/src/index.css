@@ -1,6 +1,44 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
+@theme {
+    --color-dark: #050505;
+    --color-accentCyan: var(--accent-cyan);
+    --color-accentPurple: var(--accent-purple);
+    --color-starkWhite: #F5F5F5;
+
+    --color-theme-bg: var(--bg-color);
+    --color-theme-text: var(--text-color);
+    --color-theme-heading: var(--heading-color);
+    --color-theme-muted: var(--text-muted);
+    --color-theme-subtle: var(--text-subtle);
+    --color-theme-surface: var(--surface-bg);
+    --color-theme-border: var(--surface-border);
+    --color-theme-border-subtle: var(--surface-border-subtle);
+    --color-theme-input: var(--input-bg);
+    --color-theme-input-border: var(--input-border);
+    --color-theme-input-placeholder: var(--input-placeholder);
+    --color-theme-btn-bg: var(--btn-bg);
+    --color-theme-btn-text: var(--btn-text);
+    --color-theme-footer: var(--footer-bg);
+    --color-theme-preloader-bg: var(--preloader-bg);
+    --color-theme-preloader-text: var(--preloader-text);
+    --color-theme-icon-bg: var(--icon-bg);
+    --color-theme-tab-active-bg: var(--tab-active-bg);
+    --color-theme-tab-active-text: var(--tab-active-text);
+    --color-theme-tab-inactive-bg: var(--tab-inactive-bg);
+    --color-theme-tab-inactive-border: var(--tab-inactive-border);
+    --color-theme-tab-inactive-text: var(--tab-inactive-text);
+    --color-theme-table-hover: var(--table-hover);
+    --color-theme-badge: var(--badge-bg);
+    --color-theme-slot: var(--slot-bg);
+    --color-theme-overlay: var(--overlay-bg);
+    --color-theme-gradient-to: var(--gradient-to);
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-sans: 'Outfit', sans-serif;
+}
+
 :root {
     --bg-color: #050505;
     --text-color: #F5F5F5;

@@ -3,6 +3,9 @@ from config import db
 import bcrypt
 from utils.jwtHelper import generate_token
 from bson import ObjectId
+import secrets
+from datetime import datetime, timedelta, timezone
+from utils.emailHelper import send_otp_email
 
 users = db["users"]
 
@@ -34,21 +37,30 @@ def register():
         bcrypt.gensalt()
     )
 
+    otp = str(secrets.randbelow(900000) + 100000)
+    otp_expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
+
     user = {
         "name": name,
         "email": email,
         "password": hashed_password,
         "phone": phone,
         "role": "user",
-        "membership_tier": "standard"
+        "membership_tier": "standard",
+        "is_verified": False,
+        "otp": otp,
+        "otp_expires_at": otp_expires_at
     }
 
     result = users.insert_one(user)
+    
+    # Send verification email asynchronously
+    send_otp_email(email, otp)
 
     return jsonify({
-        "message": "User registered successfully",
-        "user_id": str(result.inserted_id),
-        "membership_tier": "standard"
+        "message": "Registration successful. Please verify your email with the OTP sent.",
+        "email": email,
+        "needs_verification": True
     }), 201
 
 
@@ -76,6 +88,12 @@ def login():
         return jsonify({
             "message": "Invalid email or password"
         }), 401
+
+    # Block login for unverified standard users
+    if user.get("role") == "user" and not user.get("is_verified", False):
+        return jsonify({
+            "message": "Please verify your email address before signing in."
+        }), 403
 
     if user.get("role") == "admin":
         return jsonify({
@@ -206,3 +224,79 @@ def update_profile():
         "role": user.get("role", "user"),
         "membership_tier": user.get("membership_tier", "standard")
     }), 200
+
+
+def verify_otp():
+    data = request.json or {}
+    email = data.get("email")
+    otp = data.get("otp")
+
+    if not email or not otp:
+        return jsonify({"message": "Email and OTP are required"}), 400
+
+    user = users.find_one({"email": email})
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    if user.get("is_verified", False):
+        return jsonify({"message": "User is already verified"}), 200
+
+    db_otp = user.get("otp")
+    otp_expires_at = user.get("otp_expires_at")
+
+    if not db_otp or not otp_expires_at:
+        return jsonify({"message": "No OTP verification request active"}), 400
+
+    now = datetime.now(timezone.utc)
+    # If the expiration timestamp in DB is naive, make now a naive UTC datetime for comparison
+    if otp_expires_at.tzinfo is None:
+        now = now.replace(tzinfo=None)
+
+    if now > otp_expires_at:
+        return jsonify({"message": "OTP has expired. Please request a new one."}), 400
+
+    if db_otp != str(otp).strip():
+        return jsonify({"message": "Invalid OTP code"}), 400
+
+    # Verify user and clear OTP fields
+    users.update_one(
+        {"_id": user["_id"]},
+        {
+            "$set": {"is_verified": True},
+            "$unset": {"otp": "", "otp_expires_at": ""}
+        }
+    )
+
+    return jsonify({"message": "Email verified successfully. You can now login."}), 200
+
+
+def resend_otp():
+    data = request.json or {}
+    email = data.get("email")
+
+    if not email:
+        return jsonify({"message": "Email is required"}), 400
+
+    user = users.find_one({"email": email})
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    if user.get("is_verified", False):
+        return jsonify({"message": "User is already verified"}), 200
+
+    otp = str(secrets.randbelow(900000) + 100000)
+    otp_expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
+
+    users.update_one(
+        {"_id": user["_id"]},
+        {
+            "$set": {
+                "otp": otp,
+                "otp_expires_at": otp_expires_at
+            }
+        }
+    )
+
+    send_otp_email(email, otp)
+
+    return jsonify({"message": "A new OTP has been sent to your email address."}), 200
